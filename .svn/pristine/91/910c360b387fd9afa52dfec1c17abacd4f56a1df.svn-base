@@ -1,0 +1,15 @@
+package com.demo.apiserver.message.common;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class LocaleConstants {
+    public static final Map<String, String> LOCALE_TYPE = new HashMap<String, String>();
+
+    static {
+        LOCALE_TYPE.put("1", "ko");
+        LOCALE_TYPE.put("2", "ja");
+        LOCALE_TYPE.put("3", "zh");
+        LOCALE_TYPE.put("4", "en");
+    }
+}

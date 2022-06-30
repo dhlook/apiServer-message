@@ -1,0 +1,113 @@
+package com.demo.apiserver.message.repository;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.elasticsearch.action.bulk.BulkItemResponse;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
+
+import com.demo.apiserver.message.common.AppName;
+import com.demo.apiserver.message.common.CommonUtils;
+import com.demo.apiserver.message.domain.CommonType;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Repository
+public class ElasticSearchDao {
+    private static final Logger logger = LoggerFactory.getLogger(ElasticSearchDao.class);
+    @Value("${es.product.type.dfas}")
+    private String DFAS_PRODUCT;
+    @Value("${es.index.name}")
+    private String INDEX_HEAD;
+
+    @Autowired
+    RestHighLevelClient client;
+
+    public void insertCommonTypeData(String topic, final List<CommonType> logs) {
+    	
+        BulkRequest request  = new BulkRequest();
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");
+         
+        
+        try {
+        	for (CommonType log : logs) {
+
+                //에이전트에서 전달받지 않는 항목들 값 세팅
+                log.setColumn();
+                //현재서버 시간 입력
+                Date date = new Date();
+                String timeStamp = sdf.format(date);
+                Map<String, Object> map = mapper.convertValue(log, new TypeReference<Map<String,Object>>(){});
+                map.put("@timestamp", timeStamp);
+                map.put("timestampSeconds", date.getTime());
+                map.put("@timestampHour", CommonUtils.getHourToDateString(timeStamp));
+                
+                System.out.println(topic + " : " + mapper.writeValueAsString(map));	
+                
+                IndexRequest indexRequest = null;
+                
+                //dfas 데이터는 1개의  index로 설정, 파이몬은 일단위로 설정
+                //dfas 데이터는  id를 지정하여 수집시점마다 생성되는 중복데이터를 제거하고 , 실시간로그는 
+        		if(log.getProduct().equals(DFAS_PRODUCT)) {
+        			indexRequest = new IndexRequest(INDEX_HEAD + DFAS_PRODUCT).id(getDocId(log)).source(mapper.writeValueAsString(map), XContentType.JSON);
+        			//JoinType일 경우 라우팅 필수
+        			if(topic.equals(AppName.FILE) || topic.equals(AppName.FILE_CONTENTS) || topic.equals(AppName.MAIL) || topic.equals(AppName.MAIL_ATTFILE)) {
+        				indexRequest.routing("JoinType");
+        			}
+        		} else {
+        			SimpleDateFormat nowsdf = new SimpleDateFormat("yyyyMMdd");
+        			indexRequest = new IndexRequest(INDEX_HEAD + nowsdf.format(new Date())).source(mapper.writeValueAsString(map), XContentType.JSON);
+        		}
+                request.add(indexRequest);
+            }
+        	
+        	BulkResponse bulkResponse = client.bulk(request, RequestOptions.DEFAULT);
+        	if(bulkResponse.hasFailures()) {
+                for (BulkItemResponse bulkItemResponse : bulkResponse) {
+                    if (bulkItemResponse.isFailed()) {
+                        BulkItemResponse.Failure failure = bulkItemResponse.getFailure();
+                        logger.info("Error : " + failure.toString());
+                    }
+                }
+        	} 
+        } catch(Exception e) {
+        	e.printStackTrace();
+        	logger.info("insertCommonTypeData Exception : " + e.getMessage());
+        }
+        
+    }
+    
+    public String getDocId(CommonType log) {
+		
+		String docId = "";
+		String prefix = log.getCustomerId() + "_" +  log.getAgentId() + "_" + log.getAppName() + "_";
+		
+		if(log.getAppName().equals(AppName.RECENT_DOCS) || log.getAppName().equals(AppName.LINK_FILE)) {
+			docId = prefix + log.getIdx();
+		} else if(log.getAppName().equals(AppName.FILE_CONTENTS)) {
+			docId = prefix + log.getMd5(); 
+		} else if(log.getAppName().equals(AppName.MAIL)) {
+			docId = prefix + log.getMailId(); 
+		} else if(log.getAppName().equals(AppName.MAIL_ATTFILE)) {
+			docId = prefix + log.getFileId() + log.getMd5(); 
+		} else {
+			docId = prefix + log.getInfoId();
+		}
+		
+		return docId;
+	}
+    
+}

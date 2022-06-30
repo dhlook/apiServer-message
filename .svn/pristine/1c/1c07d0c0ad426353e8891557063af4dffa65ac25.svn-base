@@ -1,0 +1,1364 @@
+{
+  "index_patterns" : [
+    "pimonng-*"
+  ],
+  "settings" : {
+    "index" : {
+      "analysis" : {
+        "filter" : {
+          "whitespace_remove" : {
+            "pattern" : " ",
+            "type" : "pattern_replace",
+            "replacement" : ""
+          },
+          "doublequote_remove" : {
+            "pattern" : "\"",
+            "type" : "pattern_replace",
+            "replacement" : ""
+          },
+          "email" : {
+            "type" : "pattern_capture",
+            "preserve_original" : "true",
+            "patterns" : [
+              "([^@]+)",
+              "@(.+)"
+            ]
+          },
+          "name_ascii_folding" : {
+            "type" : "asciifolding",
+            "preserve_original" : "true"
+          }
+        },
+        "char_filter" : {
+          "digits_only" : {
+            "pattern" : "[^0-9]+",
+            "type" : "pattern_replace",
+            "replacement" : ""
+          }
+        },
+        "analyzer" : {
+          "email_analyzer" : {
+            "filter" : [
+              "email",
+              "lowercase",
+              "unique"
+            ],
+            "type" : "custom",
+            "tokenizer" : "uax_url_email"
+          },
+          "filename_analyzer" : {
+            "filter" : [
+              "lowercase",
+              "whitespace_remove"
+            ],
+            "tokenizer" : "ngram_tokenizer"
+          },
+          "name_analyzer" : {
+            "filter" : [
+              "trim",
+              "lowercase",
+              "name_ascii_folding"
+            ],
+            "tokenizer" : "standard"
+          },
+          "ngram_analyzer" : {
+            "filter" : [
+              "lowercase"
+            ],
+            "type" : "custom",
+            "tokenizer" : "ngram_tokenizer"
+          },
+          "contents_analyzer" : {
+            "filter" : [
+              "lowercase"
+            ],
+            "char_filter" : [
+              "html_strip"
+            ],
+            "type" : "custom",
+            "tokenizer" : "whitespace"
+          },
+          "whitespace_analyzer" : {
+            "filter" : [
+              "lowercase",
+              "doublequote_remove"
+            ],
+            "type" : "custom",
+            "tokenizer" : "whitespace"
+          },
+          "digit_analyzer" : {
+            "type" : "custom",
+            "char_filter" : [
+              "digits_only"
+            ],
+            "tokenizer" : "keyword"
+          },
+          "path_analyzer" : {
+            "filter" : [
+              "lowercase",
+              "whitespace_remove"
+            ],
+            "type" : "custom",
+            "tokenizer" : "filePath_pattern_tokenizer"
+          },
+          "lower_keyword" : {
+            "filter" : [
+              "lowercase"
+            ],
+            "type" : "custom",
+            "tokenizer" : "keyword"
+          }
+        },
+        "tokenizer" : {
+          "email_pattern_tokenizer" : {
+            "pattern" : ",+",
+            "type" : "pattern"
+          },
+          "filePath_pattern_tokenizer" : {
+            "pattern" : "(\\\\+)|(/+)",
+            "type" : "pattern"
+          },
+          "ngram_tokenizer" : {
+            "type" : "nGram",
+            "min_gram" : "2",
+            "max_gram" : "16"
+          }
+        }
+      },
+      "number_of_shards" : "1",
+      "number_of_replicas" : "0",
+      "max_ngram_diff" : "15"
+    }
+  },
+  "mappings" : {
+  	"properties" : {
+        "@timestamp" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis",
+          "index" : "true"
+        },
+        "timestampSeconds" : {
+          "type" : "date",
+          "format" : "epoch_second"
+        },
+        "@timestampHour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "customerId" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "caseId" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "agentId" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "product" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "productSeq" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "appName" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "tag" : {
+          "type" : "nested",
+          "properties" : {
+            "userId" : {
+              "index" : "false",
+              "type" : "keyword"
+            },
+            "caseId" : {
+              "index" : "false",
+              "type" : "integer"
+            },
+            "seq" : {
+              "index" : "false",
+              "type" : "integer"
+            }
+          }
+        },
+        "createdate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "createhour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "modifydate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "modifyhour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "accessdate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "accesshour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "diskid" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "sid" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "computerName" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "fileName" : {
+          "analyzer" : "ngram_analyzer",
+          "search_analyzer" : "keyword",
+          "term_vector" : "with_positions_offsets",
+          "type" : "text",
+          "fields" : {
+            "raw" : {
+              "index" : "false",
+              "type" : "keyword"
+            }
+          }
+        },
+        "filePath" : {
+          "type" : "text",
+          "analyzer" : "path_analyzer",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "fileid" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "md5" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "sha256" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "ext" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "size" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "volumename" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "category" : {
+          "properties" : {
+            "ip" : {
+              "type" : "keyword"
+            },
+            "email" : {
+              "type" : "keyword"
+            },
+            "url" : {
+              "type" : "keyword"
+            },
+            "bank" : {
+              "type" : "text",
+              "analyzer" : "digit_analyzer",
+              "fields" : {
+                "raw" : {
+                  "type" : "keyword",
+                  "index" : "false"
+                }
+              }
+            },
+            "credit" : {
+              "type" : "text",
+              "analyzer" : "digit_analyzer",
+              "fields" : {
+                "raw" : {
+                  "type" : "keyword",
+                  "index" : "false"
+                }
+              }
+            },
+            "telephone" : {
+              "type" : "text",
+              "analyzer" : "digit_analyzer",
+              "fields" : {
+                "raw" : {
+                  "type" : "keyword",
+                  "index" : "false"
+                }
+              }
+            }
+          }
+        },
+        "timeZone" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "logtype" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "isencrypt" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "srcPath" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "contents" : {
+          "analyzer" : "contents_analyzer",
+          "term_vector" : "with_positions_offsets",
+          "store" : true,
+          "type" : "text",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "true",
+              "ignore_above": 256
+            }
+          }
+        },
+        "deviceType" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "accountName" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "browserType" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "processName" : {
+    	  "type" : "text",
+          "analyzer" : "ngram_analyzer",
+          "search_analyzer" : "keyword",
+          "term_vector" : "with_positions_offsets",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "parentProcessName" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "processId" : {
+          "type" : "integer",
+          "index" : "true"
+        },
+        "peCnt" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "keywordCnt" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "outflowType" : {
+          "type" : "integer",
+          "index" : "true"
+        },
+        "srcDeviceId" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "destDeviceId" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "logDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "logHour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "isAutoEncrypt" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "isBlock" : {
+          "type" : "integer",
+          "index" : "true"
+        },
+        "destFileId" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "destFilePath" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "isDelete" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "deleteDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "deleteHour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "encryptType" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "signatureType" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "recoveryType" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "fileItemType" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "physicalSize" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "startDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "startHour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "entDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "endHour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "domainName" : {
+          "index" : "true",
+          "type" : "text",
+          "fields" : {
+            "raw" : {
+              "index" : "false",
+              "type" : "keyword"
+            },
+            "sort" : {
+              "analyzer" : "lower_keyword",
+              "type" : "text"
+            }
+          }
+        },
+        "referrer" : {
+          "analyzer" : "filename_analyzer",
+          "term_vector" : "with_positions_offsets",
+          "type" : "text",
+          "fields" : {
+            "raw" : {
+              "index" : "false",
+              "type" : "keyword"
+            },
+            "sort" : {
+              "analyzer" : "lower_keyword",
+              "type" : "text"
+            }
+          }
+        },
+        "statusInfo" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "mimeType" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "linkName" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "isNetworkLink" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "program" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "netbios" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "macAddress" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "registryPath" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "registryKey" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "offset" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "mruValue" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "mruType" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "shellbagType" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "zipSubFolderaAcessDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "mailId" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "syncType" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "syncAction" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "isShared" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "isFolder" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "isLocal" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "oldPath" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "mappedPath" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "cloudEntry" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+		"subject" : {
+		  "analyzer" : "ngram_analyzer",
+		  "search_analyzer" : "keyword",
+		  "term_vector" : "with_positions_offsets",
+		  "type" : "text"
+		},
+		"mailpath" : {
+		  "type" : "keyword",
+		  "index" : "true"
+		},
+		"sender": {
+			"analyzer" : "email_analyzer",
+			"type": "text",
+			"fields": {
+				"raw": {
+					"index": "false",
+					"type": "keyword"
+				},
+				"sort": {
+					"analyzer": "lower_keyword",
+					"type": "text"
+				}							
+			}					
+		},
+		"cc" : {
+		  "index" : "true",
+		  "type" : "keyword"
+		},
+		"bcc" : {
+		  "index" : "true",
+		  "type" : "keyword"
+		},
+		"recipients": {
+			"analyzer": "email_analyzer",
+			"type": "text",
+			"fields": {
+				"raw": {
+					"index": "false",
+					"type": "keyword"
+				},
+				"sort": {
+					"analyzer": "lower_keyword",
+					"type": "text"
+				}							
+			}					
+		},
+		"recvdate" : {
+		  "format" : "basic_date_time_no_millis",
+		  "type" : "date"
+		},
+		"attFileCnt" : {
+		  "index" : "false",
+		  "type" : "keyword"
+		},
+		"isContentSaved" : {
+		  "index" : "false",
+		  "type" : "keyword"
+		},
+		"senddate" : {
+		  "format" : "basic_date_time_no_millis",
+		  "type" : "date"
+		},
+        "folderName" : {
+          "type" : "text",
+          "analyzer" : "ngram_analyzer",
+          "search_analyzer" : "keyword",
+          "term_vector" : "with_positions_offsets",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "folderPath" : {
+          "type" : "text",
+          "analyzer" : "path_analyzer",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "state" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "disconnectDate" : {
+          "format" : "basic_date_time_no_millis",
+          "type" : "date"
+        },
+        "disconnectHour" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "adminId" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "printName" : {
+          "index" : "true",
+          "type" : "keyword"
+        },
+        "defaultPrint" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "port" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "isExceptPrint" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "productId" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "productName" : {
+          "analyzer" : "lower_keyword",
+          "type" : "text"
+        },
+        "venderId" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "venderName" : {
+          "analyzer" : "lower_keyword",
+          "type" : "text"
+        },
+        "serialNumber" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "diskSignature" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "volumeGuid" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "revision" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "driveName" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "parentIdPrefix" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "setupApiInstallDate" : {
+          "format" : "basic_date_time_no_millis",
+          "type" : "date"
+        },
+        "setupApiInstalHhour" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "registryInstallDate" : {
+          "format" : "basic_date_time_no_millis",
+          "type" : "date"
+        },
+        "registryInstallHour" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "bootFirstConnectDate" : {
+          "format" : "basic_date_time_no_millis",
+          "type" : "date"
+        },
+        "bootFirstConnectHour" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "lastConnectDate" : {
+          "format" : "basic_date_time_no_millis",
+          "type" : "date"
+        },
+        "lastConnectHour" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "lastPlugUnPlugDate" : {
+          "format" : "basic_date_time_no_millis",
+          "type" : "date"
+        },
+        "lastPlugUnPlugHour" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "usbStorkey" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "isBlockDate" : {
+          "format" : "basic_date_time_no_millis",
+          "type" : "date"
+        },
+        "isBlockHour" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "isExcept" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "deviceUseType" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "beforeNetworkAdapterGuid" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "beforeNetworkAdapterName" : {
+          "index" : "true",
+          "type" : "keyword"
+        },
+        "beforeIp" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "afterNetworkAdapterGuid" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "afterNetworkAdapterName" : {
+          "index" : "true",
+          "type" : "keyword"
+        },
+        "afterIp" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "changeDate" : {
+          "format" : "basic_date_time_no_millis",
+          "type" : "date"
+        },
+        "changeHour" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "subnetMask" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "gateway" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "dnsServer" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "networkName" : {
+          "index" : "true",
+          "type" : "keyword"
+        },
+        "encryption" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "phyType" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "networkAdapterName" : {
+          "type" : "text",
+          "analyzer" : "ngram_analyzer",
+          "search_analyzer" : "keyword",
+          "term_vector" : "with_positions_offsets",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "bssId" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "eventId" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "eventDate" : {
+          "format" : "basic_date_time_no_millis",
+          "type" : "date"
+        },
+        "threadId" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "interfaceGuid" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "bssType" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "eventType" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "authentication" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "bssIdCompany" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "localMacAddress" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "connectionMode" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "profileName" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "disconnectReason" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "eventRecordId" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "ssid" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "isRecovery" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "keyType" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "connectType" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "passwd" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "defaultMac" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "lanType" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "localIp" : {
+          "type" : "ip",
+          "index" : "false",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "localPort" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "remoteIp" : {
+          "type" : "ip",
+          "index" : "false",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "remotePort" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "status" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "parentProcessId" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "hostUrl" : {
+          "type" : "text",
+          "analyzer" : "ngram_analyzer",
+          "search_analyzer" : "keyword",
+          "term_vector" : "with_positions_offsets",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "directoryUrl" : {
+          "type" : "text",
+          "analyzer" : "ngram_analyzer",
+          "search_analyzer" : "keyword",
+          "term_vector" : "with_positions_offsets",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "infoType" : {
+          "index" : "false",
+          "type" : "keyword"
+        },
+        "isSearchUrl" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "searchKeyword" : {
+          "type" : "text",
+          "analyzer" : "ngram_analyzer",
+          "search_analyzer" : "keyword",
+          "term_vector" : "with_positions_offsets",
+          "fields" : {
+            "tokenized" : {
+              "type" : "text",
+              "analyzer" : "whitespace_analyzer"
+            },
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "isBlackList" : {
+          "type" : "keyword",
+          "index" : "true"
+        },
+        "contentType" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "serverName" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "serverResponse" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "responseCode" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "serverDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "serverModifyDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "expireDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "contentEncoding" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "souceName" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "cacheControl" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "etag" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "blockDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "blockHour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "id" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "password" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "cmdName" : {
+          "type" : "text",
+          "analyzer" : "ngram_analyzer",
+          "search_analyzer" : "keyword",
+          "term_vector" : "with_positions_offsets",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "cmdType" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "lastCmdDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "serviceName" : {
+          "type" : "text",
+          "analyzer" : "ngram_analyzer",
+          "search_analyzer" : "keyword",
+          "term_vector" : "with_positions_offsets",
+          "fields" : {
+            "raw" : {
+              "index" : "false",
+              "type" : "keyword"
+            }
+          }
+        },
+        "serviceDesc" : {
+          "type" : "text",
+          "analyzer" : "ngram_analyzer",
+          "search_analyzer" : "keyword",
+          "term_vector" : "with_positions_offsets"
+        },
+        "serviceStatus" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "startType" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "userName" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "binaryPath" : {
+          "type" : "text",
+          "analyzer" : "path_analyzer",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "lastaccessdate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "lastaccesshour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "runCnt" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "installDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "installHour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "installPath" : {
+          "type" : "text",
+          "analyzer" : "path_analyzer",
+          "fields" : {
+            "raw" : {
+              "type" : "keyword",
+              "index" : "false"
+            }
+          }
+        },
+        "about" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "publisher" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "uninstallStr" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "fileType" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "autorunFileInfo" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "pid" : {
+          "type" : "integer",
+          "index" : "true"
+        },
+        "ppid" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "parentProcessPath" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "cpuUsage" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "memoryUsage" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "loginCnt" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "isScreenSave" : {
+          "index" : "false",
+          "type" : "integer"
+        },
+        "screenSaveTimeOut" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "lastLoginDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "lastLoginFailDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "changePassDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "accountCreateDate" : {
+          "type" : "date",
+          "format" : "basic_date_time_no_millis"
+        },
+        "hiveFileName" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "eventHour" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "level" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "eventlogId" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "eventName" : {
+          "type" : "keyword",
+          "index" : "false"
+        },
+        "mode" : {
+          "type" : "integer",
+          "index" : "false"
+        },
+        "eventFileType" : {
+          "type" : "integer",
+          "index" : "false"
+        },         
+        
+        "AnalysisType":{
+          "type" : "integer",
+          "index" : "true"        
+        },        
+        "AnalysisDESC":{
+          "type" : "keyword",
+          "index" : "false"        
+        },          
+        "DangerFlag":{
+          "type" : "integer",
+          "index" : "true"        
+        },          
+        "AutoRunName":{
+          "type" : "keyword",
+          "index" : "true"        
+        },     
+        "AutoRunType":{
+          "type" : "integer",
+          "index" : "false"        
+        },                          
+        "version":{
+          "type" : "keyword",
+          "index" : "false"        
+        },
+        "companyName":{
+          "type" : "keyword",
+          "index" : "true"        
+        } ,                  
+        "peDetail":{
+          "type" : "keyword",
+          "index" : "true"        
+        } ,         
+        "keywordDetail":{
+          "type" : "keyword",
+          "index" : "true"        
+        } ,            
+        "isRiskFile":{
+          "type" : "integer",
+          "index" : "false"        
+        } ,            
+        "riskFileDESC":{
+          "type" : "integer",
+          "index" : "false"        
+        } , 
+        "lastAccDate":{
+          "type" : "keyword",
+          "index" : "false"        
+        } , 
+        "lastAccHour":{
+          "type" : "integer",
+          "index" : "false"        
+        },
+     	"deleteName":{
+          "type" : "keyword",
+          "index" : "false"        
+        },
+        "deleteType":{
+          "type" : "integer",
+          "index" : "false"        
+        },
+        "peType": {
+		  "type" : "integer",
+          "index" : "true"        
+        },
+        "joinType": {
+		  "type" : "join",
+          "relations": {
+            "parent": ["fileContents", "mailFile"],
+           	"mailFile": "mailFileContents"
+          }    
+        }
+  	}
+  }
+}

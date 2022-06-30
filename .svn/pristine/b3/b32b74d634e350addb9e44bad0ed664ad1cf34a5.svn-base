@@ -1,0 +1,134 @@
+package com.demo.apiserver.message.domain;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+import com.demo.apiserver.message.common.CustomDecodeJsonDataDeserializer;
+import com.demo.apiserver.message.common.CustomDefaultJsonDateDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+public class BaseDomain {
+    private String customerId;
+    private String caseId;
+    private String agentId;
+    private String topicName;
+    @JsonDeserialize(using = CustomDefaultJsonDateDeserializer.class)
+    private Timestamp collectDate;
+    @JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)
+    private String timeZone;
+    private String product;
+    private String productSeq;
+    private String appName;
+	private String payload;
+	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)
+	private String agentName;
+	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)
+	private String agentDeptName;
+    private List<? extends BaseClass> list;
+
+   	public String getAppName() {
+   		return appName;
+   	}
+
+   	public void setAppName(String appName) {
+   		this.appName = appName;
+   	}
+   	
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCaseId() {
+        return caseId;
+    }
+
+    public void setCaseId(String caseId) {
+        this.caseId = caseId;
+    }
+
+    public String getAgentId() {
+        return agentId;
+    }
+
+
+    public String getTopicName() {
+        return topicName;
+    }
+
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
+    }
+
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
+    }
+
+
+    public Timestamp getCollectDate() {
+        return collectDate;
+    }
+
+    public void setCollectDate(Timestamp collectDate) {
+        this.collectDate = collectDate;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public void setPayload(String payload) {
+        this.payload = payload;
+    }
+
+    public List<? extends BaseClass> getList() {
+        return list;
+    }
+
+    public void setList(List<? extends BaseClass> list) {
+        this.list = list;
+    }
+
+    public String getProduct() {
+		return product;
+	}
+
+	public void setProduct(String product) {
+		this.product = product;
+	}
+
+	public String getProductSeq() {
+		return productSeq;
+	}
+
+	public void setProductSeq(String productSeq) {
+		this.productSeq = productSeq;
+	}
+
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	public String getAgentDeptName() {
+		return agentDeptName;
+	}
+
+	public void setAgentDeptName(String agentDeptName) {
+		this.agentDeptName = agentDeptName;
+	}
+}

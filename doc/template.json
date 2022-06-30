@@ -1,0 +1,122 @@
+{
+  "index_patterns": [
+    "apiserver-*"
+  ],
+  "settings": {
+    "index": {
+      "analysis": {
+        "filter": {
+          "whitespace_remove": {
+            "pattern": " ",
+            "type": "pattern_replace",
+            "replacement": ""
+          }
+        },
+        "analyzer": {
+          "ngram_analyzer": {
+            "filter": [
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "ngram_tokenizer"
+          },
+          "contents_analyzer": {
+            "filter": [
+              "lowercase"
+            ],
+            "char_filter": [
+              "html_strip"
+            ],
+            "type": "custom",
+            "tokenizer": "whitespace"
+          },
+          "whitespace_analyzer": {
+            "filter": [
+              "lowercase",
+              "doublequote_remove"
+            ],
+            "type": "custom",
+            "tokenizer": "whitespace"
+          },
+          "path_analyzer": {
+            "filter": [
+              "lowercase",
+              "whitespace_remove"
+            ],
+            "type": "custom",
+            "tokenizer": "filePath_pattern_tokenizer"
+          },
+          "lower_keyword": {
+            "filter": [
+              "lowercase"
+            ],
+            "type": "custom",
+            "tokenizer": "keyword"
+          }
+        },
+        "tokenizer": {
+          "ngram_tokenizer": {
+            "type": "nGram",
+            "min_gram": "2",
+            "max_gram": "16"
+          }
+        }
+      },
+      "number_of_shards": "1",
+      "number_of_replicas": "0",
+      "max_ngram_diff": "15"
+    }
+  },
+  "mappings": {
+    "properties": {
+      "@timestamp": {
+        "type": "date",
+        "format": "basic_date_time_no_millis",
+        "index": "true"
+      },
+      "timestampSeconds": {
+        "type": "date",
+        "format": "epoch_second"
+      },
+      "@timestampHour": {
+        "type": "integer",
+        "index": "false"
+      },
+      "path": {
+        "type": "keyword",
+        "index": "true"
+      },
+      "contents": {
+        "analyzer": "contents_analyzer",
+        "term_vector": "with_positions_offsets",
+        "store": true,
+        "type": "text",
+        "fields": {
+          "raw": {
+            "type": "keyword",
+            "index": "true",
+            "ignore_above": 256
+          }
+        }
+      },
+      "url": {
+        "type": "text",
+        "analyzer": "ngram_analyzer",
+        "search_analyzer": "keyword",
+        "term_vector": "with_positions_offsets",
+        "fields": {
+          "raw": {
+            "type": "keyword",
+            "index": "false"
+          }
+        }
+      },
+      "subject": {
+        "analyzer": "ngram_analyzer",
+        "search_analyzer": "keyword",
+        "term_vector": "with_positions_offsets",
+        "type": "text"
+      }
+    }
+  }
+}

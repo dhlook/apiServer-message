@@ -1,0 +1,50 @@
+package com.demo.apiserver.message.domain;
+
+import java.util.ArrayList;
+
+public class Category {
+
+	private ArrayList<String> email = new ArrayList<String> ();
+    private ArrayList<String> ip = new ArrayList<String> ();
+    private ArrayList<String> url = new ArrayList<String> ();
+    private ArrayList<String> bank = new ArrayList<String> ();
+    private ArrayList<String> credit = new ArrayList<String> ();
+    private ArrayList<String> telephone = new ArrayList<String> ();
+
+    public ArrayList<String> getEmail() {
+        return email;
+    }
+    public void setEmail(ArrayList<String> email) {
+        this.email = email;
+    }
+    public ArrayList<String> getIp() {
+        return ip;
+    }
+    public void setIp(ArrayList<String> ip) {
+        this.ip = ip;
+    }
+    public ArrayList<String> getUrl() {
+        return url;
+    }
+    public void setUrl(ArrayList<String> url) {
+        this.url = url;
+    }
+    public ArrayList<String> getBank() {
+        return bank;
+    }
+    public void setBank(ArrayList<String> bank) {
+        this.bank = bank;
+    }
+    public ArrayList<String> getCredit() {
+        return credit;
+    }
+    public void setCredit(ArrayList<String> credit) {
+        this.credit = credit;
+    }
+    public ArrayList<String> getTelephone() {
+        return telephone;
+    }
+    public void setTelephone(ArrayList<String> telephone) {
+        this.telephone = telephone;
+    }
+}

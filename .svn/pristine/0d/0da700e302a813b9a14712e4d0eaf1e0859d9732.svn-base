@@ -1,0 +1,130 @@
+package com.demo.apiserver.message.consumer;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+import com.demo.apiserver.message.KafkaSettings;
+import com.demo.apiserver.message.common.CommonUtils;
+import com.demo.apiserver.message.common.CryptoUtils;
+import com.demo.apiserver.message.domain.CommonType;
+import com.demo.apiserver.message.service.TopicService;
+import com.google.common.base.CharMatcher;
+
+@Component
+public class ConsumerFileGroup {
+	private static final Logger logger = LoggerFactory.getLogger(ConsumerFileGroup.class);
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    private final KafkaConsumer<String, String> consumer;
+    private final String topic;
+    private TopicService service;
+    private ExecutorService executor;
+    private int defaultBatchSize;
+    private List<CommonType> list = new ArrayList<CommonType>();
+
+    public ConsumerFileGroup() {
+        this.consumer = null;
+        this.topic = null;
+    }
+
+    public ConsumerFileGroup(KafkaSettings kafkaSettings, String topic, TopicService service, int defaultBatchSize) {
+        consumer = new KafkaConsumer<>(createConsumerConfig(kafkaSettings));
+
+        this.topic = topic;
+        this.service = service;
+        this.defaultBatchSize = defaultBatchSize;
+
+        scheduler.scheduleAtFixedRate(loadLoger, 1, 1, TimeUnit.HOURS);
+    }
+
+    final Runnable loadLoger = new Runnable() {
+        public void run() {
+            if (list.size() > 0) {
+                service.messageFileAndMailContentsJob(topic, list);
+                list.clear();
+            }
+        }
+    };
+
+    public void run(int numThreads) {
+
+    	executor = Executors.newFixedThreadPool(numThreads);
+
+    	executor.submit(new Runnable() {
+    		public void run() {
+    			try {
+    				consumer.subscribe(Collections.singletonList(topic));
+    	             
+        			while (true) {
+             			ConsumerRecords<String, String> consumerRecords = consumer.poll(1000);
+             			
+             			consumerRecords.forEach(record -> {
+             
+             				String[] message  = CharMatcher.WHITESPACE.removeFrom(record.value()).split(",");
+    						if (message.length == 13) {
+    							CommonType domain = new CommonType();
+    							try {
+    								domain.setCustomerId(message[0]);
+    								domain.setCaseId(message[1]);
+    								domain.setAgentId(message[2]);
+    								domain.setMd5(message[3]);
+    								domain.setFileId(message[4]);
+    								domain.setFileType(Integer.parseInt(message[5]));
+//    								domain.setFullSaveYn(Integer.parseInt(message[6]));
+    								domain.setCollectDate(CommonUtils.getDefaultStringDate(message[7]));
+    								domain.setTimeZone(CommonUtils.unescape(message[8]));
+//    								domain.setLocalization(message[9]);
+    								domain.setContents(CryptoUtils.decrypt(message[10]));
+    								domain.setAgentName(message[11]);
+    								domain.setAgentDeptName(message[12]);
+    								domain.setAppName(topic);
+    								domain.setProduct("dfas");
+    								
+    								list.add(domain);
+    								if (list.size() >= defaultBatchSize) {
+    									service.messageFileAndMailContentsJob(topic, list);
+    									list.clear();
+    								}
+    							} catch (Exception e) {
+    								logger.error(e.getMessage());
+    							}
+    						}
+     					});
+        			}
+    			} catch(Exception e) {
+    				logger.info("ConsumerFileGroup Run Exception : " + e.getMessage());
+    			} finally {
+    				consumer.close();
+    			}
+    		}	
+    	});
+	}
+
+    private static Properties createConsumerConfig(KafkaSettings kafkaSettings) {
+    	Properties props = new Properties();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaSettings.getZookeeperConnect());
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaSettings.getGroupId());
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); // 초기오프셋 설정 - 마지막부터(latest), 처음부터(earliest), none
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");    //오프셋 오토커밋 설정
+        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, kafkaSettings.getAutoCommitIntervalMs()); //오프셋 오토커밋 시간 
+        props.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, kafkaSettings.getFetchMessageMaxBytes()); // 한번에 가져올 수 있는 최대 데이터 사이즈
+        return props;
+    }
+
+}

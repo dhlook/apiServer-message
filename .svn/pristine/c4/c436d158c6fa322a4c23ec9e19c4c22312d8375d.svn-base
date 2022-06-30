@@ -1,0 +1,57 @@
+package com.demo.apiserver.message.common;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
+
+public class CryptoUtils {
+    final static String key = "duzonSecurity1@#"; // 128 bit key
+    final static String initVector = "zhRlfltkddkSJ0(*"; // 16 bytes IV
+
+    public static String encrypt(String key, String initVector, String value) {
+        try {
+            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
+            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+
+            byte[] encrypted = cipher.doFinal(value.getBytes());
+            // return Base64.encodeBase64String(encrypted);
+            return new String(Base64.encodeBase64(encrypted, true));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static String encrypt(String value) {
+        return encrypt(key, initVector, value);
+    }
+
+
+    public static String decrypt(String key, String initVector, String encrypted) throws Exception {
+        IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
+        SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+
+        byte[] original = cipher.doFinal(Base64.decodeBase64(encrypted));
+
+        return new String(original);
+    }
+
+    public static String decrypt(String encrypted) throws Exception {
+        return decrypt(key, initVector, encrypted);
+    }
+
+
+    public static void main(String... args) throws Exception {
+        System.out.println(CryptoUtils.decrypt("Wl2ltM3llgqB6Ewb5D3vfw=="));
+        System.out.println(CryptoUtils.encrypt("1000"));
+    }
+}

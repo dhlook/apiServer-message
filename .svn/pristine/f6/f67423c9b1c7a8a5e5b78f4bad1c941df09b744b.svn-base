@@ -1,0 +1,27 @@
+package com.demo.apiserver.message.common;
+
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+
+public class CustomDecodeJsonDataDeserializer extends JsonDeserializer<String> {
+    @Override
+    public String deserialize(JsonParser jsonparser, DeserializationContext deserializationcontext) throws IOException, JsonProcessingException {
+        /**
+         * https://en.wikipedia.org/wiki/Percent-encoding#Non-standard_implementations
+         * DFAS Agent에서 만드는 log는 unicode를 urlencode를 하면서 알파벳이 아닌 문자는 %uxxxx로 표시하는데
+         * 이는 non-standard 여서 일반적인 urldecode가 제대로 처리되지 않는다.
+         * http://json.org/ 에서 확인할 수 있드시 string의 경우 "", \, / 등은 앞에 \를 넣어줘야 정상적으로 json 처리가 된다.
+         * 이를 agent 쪽에서 처리(java라면 단순히 치환을 하거나, apache common 또는 google guava의 escape class 활용) 후에 보내주면
+         * 받는 쪽은 표준 방식인지라 unescape 이런게 필요 없다.
+         * 그런데 보내는 쪽에서 %uxxxx로 표시를 하는 관계로 custom decoder를 사용하고 있다.
+         * 모든 문자열을 처리하는 관계로 성능에 대해서는 차후 살펴보도록 한다.
+         */
+
+        return CommonUtils.unescape(jsonparser.getText());
+    }
+
+}

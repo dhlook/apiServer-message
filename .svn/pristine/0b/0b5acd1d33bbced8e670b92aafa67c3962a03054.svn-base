@@ -1,0 +1,37 @@
+package com.demo.apiserver.message.common;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+
+public class CustomJsonDateDeserializer extends JsonDeserializer<Timestamp> {
+
+    private final static DateTimeFormatter DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    @Override
+    public Timestamp deserialize(JsonParser jsonparser, DeserializationContext deserializationcontext) {
+        String dateString = null;
+        LocalDateTime date = null;
+        try {
+            /** DFAS Agent쪽에서 아래 문제에 대한 변경이 있었음
+            if(jsonparser.getCurrentName().equals("LastPlug_UnPlugTime")) {
+                dateString = CommonUtils.urlDecode("20"+jsonparser.getText());
+            }else {
+                dateString = CommonUtils.urlDecode(jsonparser.getText());
+            }
+            **/
+            dateString = CommonUtils.urlDecode(jsonparser.getText());
+            if("".equals(dateString)) return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        date = LocalDateTime.parse(dateString, DATETIME_FORMAT);
+        return Timestamp.valueOf(date);
+    }
+}

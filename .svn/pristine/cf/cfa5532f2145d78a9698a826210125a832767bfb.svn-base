@@ -1,0 +1,109 @@
+package com.demo.apiserver.message.domain;
+
+import java.sql.Timestamp;
+
+public class BaseClass {
+
+    private String customerId;
+    private String caseId;
+    private String agentId;
+    private Timestamp collectDate;
+    private String timeZone;
+    private String timeZoneName;
+    private String appName;
+    private String product;
+    private String productSeq;
+    private String agentName;
+    private String agentDeptName;
+    
+
+    public String getProduct() {
+		return product;
+	}
+
+	public void setProduct(String product) {
+		this.product = product;
+	}
+
+	public String getProductSeq() {
+		return productSeq;
+	}
+
+	public void setProductSeq(String productSeq) {
+		this.productSeq = productSeq;
+	}
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+
+	public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCaseId() {
+        return caseId;
+    }
+
+    public void setCaseId(String caseId) {
+        this.caseId = caseId;
+    }
+
+    public String getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    public Timestamp getCollectDate() {
+        return collectDate;
+    }
+
+    public void setCollectDate(Timestamp collectDate) {
+        this.collectDate = collectDate;
+    }
+
+
+    public String getTimeZoneName() {
+        return timeZoneName;
+    }
+
+    public void setTimeZoneName(String timeZoneName) {
+        this.timeZoneName = timeZoneName;
+    }
+
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
+	}
+
+	public String getAgentDeptName() {
+		return agentDeptName;
+	}
+
+	public void setAgentDeptName(String agentDeptName) {
+		this.agentDeptName = agentDeptName;
+	}
+
+}

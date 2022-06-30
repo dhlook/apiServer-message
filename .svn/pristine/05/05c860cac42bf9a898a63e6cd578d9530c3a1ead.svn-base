@@ -1,0 +1,21 @@
+##https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+################### server Configuration ##########################
+server.port=8887
+spring.data.elasticsearch.hosts=10.102.10.159
+spring.data.elasticsearch.port=9200
+
+################### kafka setting #####################################
+kafka.zookeeper-connect=10.102.10.159:9092
+kafka.group-id=pimonng
+kafka.auto-commit-interval-ms=100000
+kafka.consumer-thread-num=1
+kafka.fetch-message-max-bytes=7340032
+kafka.topic-list=regUserProfile,webCookie,webCache,webBlockLog,procBlockLog,pcSecuLog,ipMonLog,liveProcessInfo,liveProcessSubInfo,liveNetworkStatus,liveServiceInfo,realtimeFileLog,linkFileLog,uninstallLog,shareFolderLog,networkInfo,autorunLog,regWinCmds,recentDocsLog,prefetchFileLog,recyclebinLog,regUsbInfo,systemOnOffInfo,internetInfo,deleteFileLists,jumpList,webBroken,shellBags,shellBagMRU,wireless,wirelessHistory,browserDownload
+kafka.main-topic-list=fileLists,mailInfo,mailFileInfo
+kafka.file-topic-list=fileContents
+################### setting ######################################
+default.db.insert.batch.size=200
+es.file.insert.batch.size=1
+es.index.name=pimonng-
+#es.type.name=pimonng_type
+es.product.type.dfas=dfas

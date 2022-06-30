@@ -1,0 +1,2087 @@
+package com.demo.apiserver.message.domain;
+
+import java.util.HashMap;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.demo.apiserver.message.common.AppName;
+import com.demo.apiserver.message.common.CommonUtils;
+import com.demo.apiserver.message.common.CustomDecodeJsonDataDeserializer;
+import com.demo.apiserver.message.common.ESJsonDateDeserializer;
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+@JsonInclude(Include.NON_DEFAULT)
+public class CommonType extends BaseClass {
+	
+	// @formatter:off
+	
+	// Primary Key
+	@JsonProperty("INFOID")             						private String infoId;
+	@JsonProperty("IDX")        								private String idx;
+	
+	// 파일 기본값
+	@JsonAlias({"createDate", "CREATEDATE"})					@JsonDeserialize(using = ESJsonDateDeserializer.class) private String createDate;
+	@JsonAlias({"modifyDate", "MODIFYDATE"})		   			@JsonDeserialize(using = ESJsonDateDeserializer.class) private String modifyDate;
+    @JsonAlias({"accessDate", "ACCESSDATE"})	     			@JsonDeserialize(using = ESJsonDateDeserializer.class) private String accessDate;
+    @JsonAlias({"diskId", "DISKID"})		     				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String diskId; //없음
+    @JsonAlias({"sid", "SID"})			          				private String sid;
+    @JsonAlias({"computerName", "COMPUTERNAME"})	   			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String computerName;
+    @JsonAlias({"fileName", "FILENAME"})						@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String fileName;
+    @JsonAlias({"filePath", "FILEPATH"})  						@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String filePath;
+    @JsonAlias({"fileId", "FILEID"})		         			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String fileId;
+    @JsonAlias({"md5", "MD5"})			            			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String md5;
+    @JsonAlias({"sha256", "SHA256"})		         			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String sha256;
+    @JsonAlias({"ext", "EXT"})			 		    			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String ext;
+    @JsonAlias({"size", "SIZE"})			           			private long size;
+    @JsonAlias({"volumeName", "VOLUMENAME"})	     			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String volumeName;
+    @JsonAlias({"logType", "LOGTYPE"})							private Integer logType;
+    @JsonAlias({"isEncrypt", "ISENCRYPT"})						private Integer isEncrypt;
+    @JsonAlias({"srcPath", "SRCPATH"})		        			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String srcPath;
+    @JsonAlias({"contents", "CONTENTS"})		       			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String contents;
+    @JsonAlias({"deviceType", "DEVICETYPE"})		   			private Integer deviceType;
+    @JsonAlias({"accountName", "ACCOUNTNAME"})	    			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String accountName;
+    @JsonAlias({"browserType", "BROWSERTYPE"})	 				private Integer browserType;
+    @JsonAlias({"processName", "PROCESSNAME"})	    			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String processName;
+    @JsonAlias({"parentProcessName", "PARENTPROCESSNAME"})		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String parentProcessName;
+    @JsonAlias({"processId", "PROCESSID"})		 				private Integer processId;
+    @JsonAlias({"peType", "PETYPE"})		 					private Integer peType;
+    
+    private Integer createHour;
+    private Integer modifyHour;
+    private Integer accessHour;
+    private Category category; //카테고리 정의 필요.
+    
+    //실시간감사
+    @JsonAlias({"peCnt", "PECNT"})			 					private Integer peCnt;
+    @JsonAlias({"keywordCnt", "KEYWORDCNT"})		 			private Integer keywordCnt;
+    @JsonAlias({"outflowType", "OUTFLOWTYPE"})		 			private Integer outflowType;
+    @JsonAlias({"srcDeviceId", "SRCDEVICEID"})		  			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String srcDeviceId;
+    @JsonAlias({"destDeviceId", "DESTDEVICEID"})	  			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String destDeviceId;
+    @JsonAlias({"logDate", "LOGDATE"})							@JsonDeserialize(using = ESJsonDateDeserializer.class) private String logDate;
+    @JsonAlias({"isAutoEncrypt", "ISAUTOENCRYPT"})				private Integer isAutoEncrypt;
+    @JsonAlias({"isBlock", "ISBLOCK"})							private Integer isBlock;
+    @JsonAlias({"destFileId", "DESTFILEID"})		  			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String destFileId;
+    @JsonAlias({"destFilePath", "DESTFILEPATH"})	  			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String destFilePath;
+    @JsonAlias({"peDetail", "PEDETAIL"})	  					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String peDetail;
+    @JsonAlias({"keywordDetail", "KEYWORDDETAIL"})	  			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String keywordDetail;
+    @JsonAlias({"outflowSubType", "OUTFLOWSUBTYPE"})		 	private Integer outflowSubType;
+    private Integer logHour;
+    
+    //삭제파일
+    @JsonAlias({"isDelete", "ISDELETE"})						private Integer isDelete;
+    @JsonAlias({"deleteDate", "DELETEDATE"})		   		  	@JsonDeserialize(using = ESJsonDateDeserializer.class) private String deleteDate;
+    @JsonAlias({"encryptType", "ENCRYPTTYPE"})					private Integer encryptType;
+    @JsonAlias({"signatureType", "SIGNATURETYPE"})				private Integer signatureType;
+    @JsonAlias({"recoveryType", "RECOVERYTYPE"})				private Integer recoveryType;
+    @JsonAlias({"fileItemType", "FILEITEMTYPE"})				private Integer fileItemType;
+    @JsonAlias({"physicalSize", "PHYSICALSIZE"})				private Integer physicalSize;
+    @JsonAlias({"deleteName", "DELETENAME"})	  				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String deleteName;
+    @JsonAlias({"deleteType", "DELETETYPE"})					private Integer deleteType;
+    private Integer deleteHour;
+    
+    //웹파일 다운로드
+    @JsonAlias({"startDate", "STARTDATE"})			   	     	@JsonDeserialize(using = ESJsonDateDeserializer.class) private String startDate;
+    @JsonAlias({"endDate", "ENDDATE"})				   	   	  	@JsonDeserialize(using = ESJsonDateDeserializer.class) private String endDate;
+    @JsonAlias({"domainName", "DOMAINNAME"})	       	   	  	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String domainName;
+    @JsonAlias({"referrer", "REFERRER"})			   	   	  	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String referrer;
+    @JsonAlias({"statusInfo", "STATUSINFO"})		   		    private Integer statusInfo;
+    @JsonAlias({"mimeType", "MIMETYPE"})		       	    	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String mimeType;
+    @JsonAlias({"companyName", "COMPANYNAME"})		       	    @JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String companyName;
+    @JsonAlias({"isMacro", "ISMACRO"})							private Integer isMacro;
+    @JsonAlias({"isCodesign", "ISCODESIGN"})					private Integer isCodesign;
+    @JsonAlias({"isMatchName", "ISMATCHNAME"})					private Integer isMatchName;
+    private Integer startHour;
+    private Integer endHour;
+    
+    //파일실행  (최근 열어본문서 및 ShellBag)
+    @JsonAlias({"linkName", "LNKNAME"})			    			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String linkName;
+    @JsonAlias({"networkLinkYn", "NETWORKLINKYN"})		 		private Integer networkLinkYn;
+    @JsonAlias({"program", "PROGRAM"})				        	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String program;
+    @JsonAlias({"netbios", "NETBIOS"})			    			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String netbios;
+    @JsonAlias({"macAddress", "MACADDRESS"})		 			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String macAddress;
+    @JsonAlias({"registryPath", "REGISTRYPATH"})				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)  private String registryPath;
+    @JsonAlias({"registryKey", "REGISTRYKEY"})  				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)  private String registryKey;
+    @JsonAlias({"offset", "OFFSET"})       						private Integer offset;
+    @JsonAlias({"mruValue", "MRUVALUE"})     					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)  private String mruValue;
+    @JsonAlias({"mruType", "MRUTYPE"})            				private String mruType;
+    @JsonAlias({"shellbagType", "SHELLBAGTYPE"}) 				private String shellbagType;
+    @JsonAlias({"zipSubfolderAccessDate", "ZIPSUBFOLDERACCESSDATE"})	@JsonDeserialize(using = ESJsonDateDeserializer.class) private String zipSubfolderAccessDate;
+    
+    @JsonAlias({"isRiskFile", "ISRISKFILE"})       				private Integer isRiskFile;
+    @JsonAlias({"riskFileDESC", "RISKFILEDESC"})  				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)  private String riskFileDESC;
+    @JsonAlias({"lastAccDate", "LASTACCDATE"})					@JsonDeserialize(using = ESJsonDateDeserializer.class) private String lastAccDate;
+    private Integer lastAccHour;
+    
+    //메일 첨부파일
+    @JsonAlias({"mailId", "MAILID"})             				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String mailId;
+    
+    //클라우드
+    @JsonAlias({"syncType", "SYNCTYPE"})  						private Integer syncType;
+    @JsonAlias({"syncAction", "SYNCACTION"})  					private Integer syncAction;
+    @JsonAlias({"isShared", "ISSHARED"})  						private Integer isShared;
+    @JsonAlias({"isFolder", "ISFOLDER"})  						private Integer isFolder;
+    @JsonAlias({"isLocal", "ISLOCAL"})  						private Integer isLocal;
+    @JsonAlias({"oldPath", "OLDPATH"})  						private Integer oldPath;
+    @JsonAlias({"mappedPath", "MAPPEDPATH"}) 					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String mappedPath;
+    @JsonAlias({"cloudEntry", "CLOUDENTRY"}) 					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String cloudEntry;
+    
+    //메일
+    @JsonAlias({"subject", "SUBJECT"})          				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String subject;
+    @JsonAlias({"mailPath", "MAILPATH"})                		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String mailPath;
+    @JsonAlias({"sender", "SENDER"})                			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String sender;
+    @JsonAlias({"cc", "CC"})                 					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String cc;
+    @JsonAlias({"bcc", "BCC"})                					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String bcc;
+    @JsonAlias({"recipients", "RECIPIENTS"})                	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String recipients;
+    @JsonAlias({"recvDate", "RECVDATE"})						@JsonDeserialize(using = ESJsonDateDeserializer.class) private String recvDate;
+    @JsonAlias({"attFileCnt", "ATTFILECNT"})                	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String attFileCnt;
+    @JsonAlias({"isContentSaved", "ISCONTENTSAVED"})            @JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String isContentSaved;
+    @JsonAlias({"sendDate", "SENDDATE"})						@JsonDeserialize(using = ESJsonDateDeserializer.class) private String sendDate;
+//    @JsonAlias({"partyId", "PARTYID"}) 							@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String partyId;
+//    @JsonAlias({"keyId", "KEYID"}) 								@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String keyId;
+//    @JsonAlias({"from", "FROM"}) 									@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String from;
+//    @JsonAlias({"to", "TO"}) 										@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String to;
+//    @JsonAlias({"replyTo", "REPLYTO"})          					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String replyTo;
+//    @JsonAlias({"date", "DATE"})									@JsonDeserialize(using = ESJsonDateDeserializer.class) private String date;
+//    @JsonAlias({"fromIp", "FROMIP"})          					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String fromIp;
+//    @JsonAlias({"toIp", "TOIP"})          						@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String toIp;
+//    @JsonAlias({"stopIp", "STOPIP"})          					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String stopIp;
+//    @JsonAlias({"header", "HEADER"})          					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String header;
+//    @JsonAlias({"bodyHtml", "BODYHTML"})          				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String bodyHtml;
+//    @JsonAlias({"mailFolder", "MAILFOLDER"})       	  			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String mailFolder;
+//    @JsonAlias({"isSelfSend", "ISSELFSEND"})  					private Integer isSelfSend; 
+//    @JsonAlias({"isRead", "ISREAD"})  							private Integer isRead;
+//    @JsonAlias({"isMemo", "ISMEMO"})  							private Integer isMemo;
+//    @JsonAlias({"isBookmark", "ISBOOKMARK"})  					private Integer isBookmark;
+//    @JsonAlias({"memo", "MEMO"})          						@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String memo; 
+//    @JsonAlias({"attachFileCnt", "ATTACHFILECNT"})  				private Integer attachFileCnt;
+//    private Integer dateHour;
+//    private String body;
+    
+    //공유폴더
+    @JsonAlias({"folderName", "FOLDERNAME"})      				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String folderName;
+    @JsonAlias({"folderPath", "FOLDERPATH"})     				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String folderPath;
+    @JsonAlias({"state", "STATE"})  							private Integer state;
+    @JsonAlias({"disconnectDate", "DISCONNECTDATE"})			@JsonDeserialize(using = ESJsonDateDeserializer.class) private String disconnectDate;
+    @JsonAlias({"adminId", "ADMINID"})          				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String adminId;
+    private Integer disconnectHour;
+    
+    //프린터
+    @JsonAlias({"printName", "PRINTNAME"})          			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String printName;
+    @JsonAlias({"defaultPrint", "DEFAULTPRINT"})  				private int defaultPrint;
+    @JsonAlias({"port", "PORT"})          						@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String port;
+    @JsonAlias({"isExceptPrint", "ISEXCEPTPRINT"})  			private int isExceptPrint;
+    
+    //이동식장치 정보 및 실시간 제어
+    @JsonAlias({"productId", "PRODUCTID"})               	   	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String productId;
+    @JsonAlias({"productName", "PRODUCTNAME"})             	 	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String productName;
+    @JsonAlias({"venderId", "VENDERID"})                   		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String venderId;
+    @JsonAlias({"venderName", "VENDERNAME"})               	 	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String venderName;
+    @JsonAlias({"serialNumber", "SERIALNUMBER"})   				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) 	private String serialNumber;
+    @JsonAlias({"diskSignature", "DISKSIGNATURE"})         	 	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String diskSignature;
+    @JsonAlias({"volumeGuid", "VOLUMEGUID"})               	 	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String volumeGuid;
+    @JsonAlias({"revision", "REVISION"})                   		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String revision;
+    @JsonAlias({"driveName", "DRIVENAME"})                 	 	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String driveName;
+    @JsonAlias({"parentIdPrefix", "PARENTIDPREFIX"})       	 	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String parentIdPrefix;
+    @JsonAlias({"setupApiInstallDate", "SETUPAPIINSTALLDATE"})        	@JsonDeserialize(using = ESJsonDateDeserializer.class)              private String setupApiInstallDate;
+    @JsonAlias({"registryInstallDate", "REGISTRYINSTALLDATE"})        	@JsonDeserialize(using = ESJsonDateDeserializer.class)              private String registryInstallDate;
+    @JsonAlias({"bootFirstConnectDate", "BOOTFIRSTCONNECTDATE"})   		@JsonDeserialize(using = ESJsonDateDeserializer.class)              private String bootFirstConnectDate;
+    @JsonAlias({"lastConnectDate", "LASTCONNECTDATE"})            		@JsonDeserialize(using = ESJsonDateDeserializer.class)              private String lastConnectDate;
+    @JsonAlias({"lastPlugUnPlugDate", "LASTPLUGUNPLUGDATE"})         	@JsonDeserialize(using = ESJsonDateDeserializer.class)              private String lastPlugUnPlugDate;
+    @JsonAlias({"usbStorkey", "USBSTORKEY"})                 			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String usbStorkey;
+    @JsonAlias({"isBlockDate", "ISBLOCKDATE"})         					@JsonDeserialize(using = ESJsonDateDeserializer.class)              private String isBlockDate;
+    @JsonAlias({"isExcept", "ISEXCEPT"})  								private Integer isExcept;
+    @JsonAlias({"deviceUseType", "DEVICEUSETYPE"})  					private Integer deviceUseType;
+    private Integer setupApiInstallHour;
+    private Integer registryInstallHour;
+    private Integer bootFirstConnectHour;
+    private Integer lastConnectHour;
+    private Integer lastPlugUnPlugHour;
+    private Integer isBlockHour;
+    
+    //IP변경 및 랜카드 정보
+    @JsonAlias({"beforeNetworkAdapterGuid", "BEFORENETWORKADAPTERGUID"}) 	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String beforeNetworkAdapterGuid;
+    @JsonAlias({"beforeNetworkAdapterName", "BEFORENETWORKADAPTERNAME"}) 	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String beforeNetworkAdapterName;
+    @JsonAlias({"beforeIp", "BEFOREIP"}) 									@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String beforeIp;
+    @JsonAlias({"afterNetworkAdapterGuid", "AFTERNETWORKADAPTERGUID"}) 		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String afterNetworkAdapterGuid;
+    @JsonAlias({"afterNetworkAdapterName", "AFTERNETWORKADAPTERNAME"}) 		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String afterNetworkAdapterName;
+    @JsonAlias({"afterIp", "AFTERIP"}) 							@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String afterIp;
+    @JsonAlias({"changeDate", "CHANGEDATE"})            		@JsonDeserialize(using = ESJsonDateDeserializer.class) private String changeDate;
+    @JsonAlias({"subnetMask", "SUBNETMASK"})  					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String subnetMask;
+    @JsonAlias({"gateway", "GATEWAY"})     						@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String gateway;
+    @JsonAlias({"dnsServer", "DNSSERVER"})   					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String dnsServer;
+    private Integer changeHour;
+    
+    //무선랜 장치 정보
+    @JsonAlias({"networkName", "NETWORKNAME"})    				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String networkName;
+    @JsonAlias({"encryption", "ENCRYPTION"})             		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String encryption;
+    @JsonAlias({"phyType", "PHYTYPE"})                			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String phyType;
+    @JsonAlias({"networkAdapterName", "NETWORKADAPTERNAME"})    @JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String networkAdapterName;
+    @JsonAlias({"bssid", "BSSID"})                  			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String bssid;
+    @JsonAlias({"eventId", "EVENTID"})                			private String eventId;
+    @JsonAlias({"eventDate", "EVENTDATE"})              		@JsonDeserialize(using = ESJsonDateDeserializer.class)              private String eventDate;
+    @JsonAlias({"threadId", "THREADID"})               			private Integer threadId;
+    @JsonAlias({"IntegererfaceGuid", "IntegerERFACEGUID"})          	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String IntegererfaceGuid;
+    @JsonAlias({"bssType", "BSSTYPE"})                			private String bssType;
+    @JsonAlias({"eventType", "EVENTTYPE"})              		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String eventType;
+    @JsonAlias({"authentication", "AUTHENTICATION"})        	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String authentication;
+    @JsonAlias({"bssidCompany", "BSSIDCOMPANY"})           		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String bssidCompany;
+    @JsonAlias({"localMacAddress", "LOCALMACADDRESS"})      	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String localMacAddress;
+    @JsonAlias({"connectionMode", "CONNECTIONMODE"})        	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String connectionMode;
+    @JsonAlias({"profileName", "PROFILENAME"})            		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String profileName;
+    @JsonAlias({"disconnectReason", "DISCONNECTREASON"})    	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String disconnectReason;
+    @JsonAlias({"eventRecordId", "EVENTRECORDID"})          	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String eventRecordId;
+    @JsonAlias({"ssid", "SSID"})                   				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String ssid;
+    @JsonAlias({"isRecovery", "ISRECOVERY"})               		private Integer isRecovery;
+    @JsonAlias({"keyType", "KEYTYPE"})        					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String keyType;
+    @JsonAlias({"connectType", "CONNECTTYPE"})    				private String connectType;
+    @JsonAlias({"passwd", "PASSWD"})         					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String passwd;
+    @JsonAlias({"defaultMac", "DEFAULTMAC"})     				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String defaultMac;
+    
+    //활성화 랜 정보
+    @JsonAlias({"lanType", "LANTYPE"})        					private Integer lanType;
+    @JsonAlias({"localIp", "LOCALIP"})     						@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String localIp;
+    @JsonAlias({"localPort", "LOCALPORT"})     					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String localPort;
+    @JsonAlias({"remoteIp", "REMOTEIP"})     					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String remoteIp;
+    @JsonAlias({"remotePort", "REMOTEPORT"})     				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String remotePort;
+    @JsonAlias({"status", "STATUS"})     						@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String status;
+    @JsonAlias({"parentProcessId", "PARENTPROCESSID"})      	private Integer parentProcessId;
+     
+    //웹접속기록
+    @JsonAlias({"hostUrl", "HOSTURL"})            				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String hostUrl;
+    @JsonAlias({"directoryUrl", "DIRECTORYURL"})       			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String directoryUrl;
+    @JsonAlias({"infoType", "INFOTYPE"})           				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String infoType;
+    @JsonAlias({"isSearchUrl", "ISSEARCHURL"})        			private Integer isSearchUrl;
+    @JsonAlias({"searchKeyword", "SEARCHKEYWORD"})      		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String searchKeyword;
+    // 서버에서 처리 필요.
+    @JsonAlias({"isBlackList", "ISBLACKLIST"})        			private Integer isBlackList;
+    @JsonAlias({"contentType", "CONTENTTYPE"})         			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String contentType;
+    @JsonAlias({"serverName", "SERVERNAME"})         			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String serverName;
+    @JsonAlias({"serverResponse", "SERVERRESPONSE"})     		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String serverResponse;
+    @JsonAlias({"responseCode", "RESPONSECODE"})            	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String responseCode;
+    @JsonAlias({"serverDate", "SERVERDATE"})            		@JsonDeserialize(using = ESJsonDateDeserializer.class) private String serverDate;
+    @JsonAlias({"serverModifyDate", "SERVERMODIFYDATE"})    	@JsonDeserialize(using = ESJsonDateDeserializer.class) private String serverModifyDate;
+    @JsonAlias({"expireDate", "EXPIREDATE"})            		@JsonDeserialize(using = ESJsonDateDeserializer.class) private String expireDate;
+    @JsonAlias({"contentEncoding", "CONTENTENCODING"})      	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String contentEncoding;
+    @JsonAlias({"sourceName", "SOURCENAME"})             		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String sourceName;
+    @JsonAlias({"cacheControl", "CACHECONTROL"})            	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String cacheControl;
+    @JsonAlias({"eTag", "ETAG"})             					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String eTag;
+    
+    //웹 접속 차단(실시간)
+    @JsonAlias({"blockDate", "BLOCKDATE"})         				@JsonDeserialize(using = ESJsonDateDeserializer.class)              private String blockDate;
+    private Integer blockHour;
+
+    //웹 계정 비밀번호
+    @JsonAlias({"id", "ID"})          							@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String id;
+    @JsonAlias({"password", "PASSWORD"})          				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String password;
+     
+    //CMD명령어
+    @JsonAlias({"cmdName", "CMDNAME"})            				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String cmdName;
+    @JsonAlias({"cmdType", "CMDTYPE"})        					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class) private String cmdType;
+    @JsonAlias({"lastCmdDate", "LASTCMDDATE"})    				@JsonDeserialize(using = ESJsonDateDeserializer.class)           private String lastCmdDate;
+    
+    //서비스
+    @JsonAlias({"serviceName", "SERVICENAME"})    				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)           private String serviceName;
+    @JsonAlias({"serviceDesc", "SERVICEDESC"})    				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)           private String serviceDesc;
+    @JsonAlias({"serviceStatus", "SERVICESTATUS"})    			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)           private String serviceStatus;
+    @JsonAlias({"startType", "STARTTYPE"})    					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)           private String startType;
+    @JsonAlias({"userName", "USERNAME"})    					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)           private String userName;
+    @JsonAlias({"binaryPath", "BINARYPATH"})    				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)           private String binaryPath;
+    
+    //프로그램 정보 (실행 및 설치 프로그램)
+    @JsonAlias({"lastAccessDate", "LASTACCESSDATE"}) 			@JsonDeserialize(using = ESJsonDateDeserializer.class)           private String lastAccessDate;
+    @JsonAlias({"runCnt", "RUNCNT"})       						private Integer runCnt;
+    @JsonAlias({"installDate", "INSTALLDATE"})    				@JsonDeserialize(using = ESJsonDateDeserializer.class)          private String installDate;
+    @JsonAlias({"installPath", "INSTALLPATH"})    				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String installPath;
+    @JsonAlias({"about", "ABOUT"})       						@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String about;
+    @JsonAlias({"publisher", "PUBLISHER"})          			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String publisher;
+    @JsonAlias({"uninstallStr", "UNINSTALLSTR"})       			@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String uninstallStr;
+    @JsonAlias({"fileType", "FILETYPE"}) 						private Integer fileType;
+    @JsonAlias({"autorunFileInfo", "AUTORUNFILEINFO"})    		@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)  private String autorunFileInfo;
+    @JsonAlias({"subModuleCnt", "SUBMODULECNT"}) 				private Integer subModuleCnt;
+    @JsonAlias({"pid", "PID"}) 									private Integer pid;
+    @JsonAlias({"ppid", "PPID"}) 								private Integer ppid;
+    @JsonAlias({"parentProcessPath", "PARENTPROCESSPATH"})  	@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)  private String parentProcessPath;
+    @JsonAlias({"cpuUsage", "CPUUSAGE"}) 						private Integer cpuUsage;
+    @JsonAlias({"memoryUsage", "MEMORYUSAGE"}) 					private Integer memoryUsage;
+    @JsonAlias({"isHide", "ISHIDE"}) 							private Integer isHide;
+    private Integer lastAccessHour;
+    private Integer installHour;
+    
+    //계정정보
+    @JsonAlias({"loginCnt", "LOGINCNT"})         				private Integer loginCnt;
+    @JsonAlias({"isScreenSave", "ISSCREENSAVE"})   				private Integer isScreenSave;
+    @JsonAlias({"screenSaveTimeout", "SCREENSAVETIMEOUT"})  	private Integer screenSaveTimeout;
+    @JsonAlias({"lastLoginDate", "LASTLOGINDATE"})      		@JsonDeserialize(using = ESJsonDateDeserializer.class)          private String lastLoginDate;
+    @JsonAlias({"lastLoginFailDate", "LASTLOGINFAILDATE"})  	@JsonDeserialize(using = ESJsonDateDeserializer.class)          private String lastLoginFailDate;
+    @JsonAlias({"changePassDate", "CHANGEPASSDATE"})  			@JsonDeserialize(using = ESJsonDateDeserializer.class)          private String changePassDate;
+    @JsonAlias({"accountCreateDate", "ACCOUNTCREATEDATE"})  	@JsonDeserialize(using = ESJsonDateDeserializer.class)          private String accountCreateDate;
+    @JsonAlias({"hiveFileName", "HIVEFILENAME"})   				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String hiveFileName;
+    
+    //이벤트로그
+    @JsonAlias({"level", "LEVEL"}) 								@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String level;
+    @JsonAlias({"eventlogId", "EVENTLOGID"})   					private Integer eventlogId;
+    @JsonAlias({"eventName", "EVENTNAME"}) 						@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String eventName;
+    private Integer eventHour;
+    
+    //SYSTEM ON/OFF 정보
+    @JsonAlias({"mode", "MODE"})       							private Integer mode;
+    @JsonAlias({"eventFileType", "EVENTFILETYPE"})       		private Integer eventFileType;
+	
+    //PC 보안성진단
+    @JsonAlias({"analysisType", "ANALYSISTYPE"})   				private Integer analysisType;
+    @JsonAlias({"analysisDESC", "ANALYSISDESC"}) 				@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String analysisDESC;
+    @JsonAlias({"dangerFlag", "DANGERFLAG"})   					private Integer dangerFlag;
+    
+    //자동시작 프로그램 정보
+    @JsonAlias({"autoRunName", "AUTORUNNAME"}) 					@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String autoRunName;
+    @JsonAlias({"autoRunType", "AUTORUNTYPE"})   				private Integer autoRunType;
+    @JsonAlias({"version", "VERSION"}) 							@JsonDeserialize(using = CustomDecodeJsonDataDeserializer.class)    private String version;
+    private HashMap<String, String> joinType; 
+    // @formatter:on
+   
+   
+	
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
+	}
+	public void setModifyDate(String modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+	public void setAccessDate(String accessDate) {
+		this.accessDate = accessDate;
+	}
+	public void setDiskId(String diskId) {
+		this.diskId = diskId;
+	}
+	public void setSid(String sid) {
+		this.sid = sid;
+	}
+	public void setComputerName(String computerName) {
+		this.computerName = computerName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	public void setFileId(String fileId) {
+		this.fileId = fileId;
+	}
+	public void setMd5(String md5) {
+		this.md5 = md5;
+	}
+	public void setSha256(String sha256) {
+		this.sha256 = sha256;
+	}
+	public void setExt(String ext) {
+		this.ext = ext;
+	}
+	public void setSize(long size) {
+		this.size = size;
+	}
+	public void setVolumeName(String volumeName) {
+		this.volumeName = volumeName;
+	}
+	public void setLogType(Integer logType) {
+		this.logType = logType;
+	}
+	public void setSrcPath(String srcPath) {
+		this.srcPath = srcPath;
+	}
+	public void setContents(String contents) {
+		this.contents = contents;
+	}
+	public void setDeviceType(Integer deviceType) {
+		this.deviceType = deviceType;
+	}
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+	public void setBrowserType(Integer browserType) {
+		this.browserType = browserType;
+	}
+	public void setProcessName(String processName) {
+		this.processName = processName;
+	}
+	public void setParentProcessName(String parentProcessName) {
+		this.parentProcessName = parentProcessName;
+	}
+	public void setProcessId(Integer processId) {
+		this.processId = processId;
+	}
+	public void setCreateHour(Integer createHour) {
+		this.createHour = createHour;
+	}
+	public void setModifyHour(Integer modifyHour) {
+		this.modifyHour = modifyHour;
+	}
+	public void setAccessHour(Integer accessHour) {
+		this.accessHour = accessHour;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	public void setPeCnt(Integer peCnt) {
+		this.peCnt = peCnt;
+	}
+	public void setKeywordCnt(Integer keywordCnt) {
+		this.keywordCnt = keywordCnt;
+	}
+	public void setOutflowType(Integer outflowType) {
+		this.outflowType = outflowType;
+	}
+	public void setSrcDeviceId(String srcDeviceId) {
+		this.srcDeviceId = srcDeviceId;
+	}
+	public void setDestDeviceId(String destDeviceId) {
+		this.destDeviceId = destDeviceId;
+	}
+	public void setLogDate(String logDate) {
+		this.logDate = logDate;
+	}
+	public void setDestFileId(String destFileId) {
+		this.destFileId = destFileId;
+	}
+	public void setDestFilePath(String destFilePath) {
+		this.destFilePath = destFilePath;
+	}
+	public void setLogHour(Integer logHour) {
+		this.logHour = logHour;
+	}
+	public void setDeleteDate(String deleteDate) {
+		this.deleteDate = deleteDate;
+	}
+	public void setEncryptType(Integer encryptType) {
+		this.encryptType = encryptType;
+	}
+	public void setSignatureType(Integer signatureType) {
+		this.signatureType = signatureType;
+	}
+	public void setRecoveryType(Integer recoveryType) {
+		this.recoveryType = recoveryType;
+	}
+	public void setFileItemType(Integer fileItemType) {
+		this.fileItemType = fileItemType;
+	}
+	public void setPhysicalSize(Integer physicalSize) {
+		this.physicalSize = physicalSize;
+	}
+	public void setDeleteHour(Integer deleteHour) {
+		this.deleteHour = deleteHour;
+	}
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+	public void setDomainName(String domainName) {
+		this.domainName = CommonUtils.getDomainName(domainName);
+	}
+	public void setReferrer(String referrer) {
+		this.referrer = referrer;
+	}
+	public void setStatusInfo(Integer statusInfo) {
+		this.statusInfo = statusInfo;
+	}
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+	public void setStartHour(Integer startHour) {
+		this.startHour = startHour;
+	}
+	public void setEndHour(Integer endHour) {
+		this.endHour = endHour;
+	}
+	public void setLinkName(String linkName) {
+		this.linkName = linkName;
+	}
+	public void setProgram(String program) {
+		this.program = program;
+	}
+	public void setNetbios(String netbios) {
+		this.netbios = netbios;
+	}
+	public void setMacAddress(String macAddress) {
+		this.macAddress = macAddress;
+	}
+	public void setRegistryPath(String registryPath) {
+		this.registryPath = registryPath;
+	}
+	public void setRegistryKey(String registryKey) {
+		this.registryKey = registryKey;
+	}
+	public void setOffset(Integer offset) {
+		this.offset = offset;
+	}
+	public void setMruValue(String mruValue) {
+		this.mruValue = mruValue;
+	}
+	public void setMruType(String mruType) {
+		this.mruType = mruType;
+	}
+	public void setShellbagType(String shellbagType) {
+		this.shellbagType = shellbagType;
+	}
+	public void setZipSubfolderAccessDate(String zipSubfolderAccessDate) {
+		this.zipSubfolderAccessDate = zipSubfolderAccessDate;
+	}
+	public void setMailId(String mailId) {
+		this.mailId = mailId;
+	}
+	public void setSyncType(Integer syncType) {
+		this.syncType = syncType;
+	}
+	public void setSyncAction(Integer syncAction) {
+		this.syncAction = syncAction;
+	}
+	public void setIsShared(Integer isShared) {
+		this.isShared = isShared;
+	}
+	public void setIsFolder(Integer isFolder) {
+		this.isFolder = isFolder;
+	}
+	public void setIsLocal(Integer isLocal) {
+		this.isLocal = isLocal;
+	}
+	public void setOldPath(Integer oldPath) {
+		this.oldPath = oldPath;
+	}
+	public void setMappedPath(String mappedPath) {
+		this.mappedPath = mappedPath;
+	}
+	public void setCloudEntry(String cloudEntry) {
+		this.cloudEntry = cloudEntry;
+	}
+	public void setCc(String cc) {
+		this.cc = cc;
+	}
+	public void setBcc(String bcc) {
+		this.bcc = bcc;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	public void setFolderName(String folderName) {
+		this.folderName = folderName;
+	}
+	public void setFolderPath(String folderPath) {
+		this.folderPath = folderPath;
+	}
+	public void setState(Integer state) {
+		this.state = state;
+	}
+	public void setDisconnectDate(String disconnectDate) {
+		this.disconnectDate = disconnectDate;
+	}
+	public void setAdminId(String adminId) {
+		this.adminId = adminId;
+	}
+	public void setDisconnectHour(Integer disconnectHour) {
+		this.disconnectHour = disconnectHour;
+	}
+	public void setPrintName(String printName) {
+		this.printName = printName;
+	}
+	public void setPort(String port) {
+		this.port = port;
+	}
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	public void setVenderId(String venderId) {
+		this.venderId = venderId;
+	}
+	public void setVenderName(String venderName) {
+		this.venderName = venderName;
+	}
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+	}
+	public void setDiskSignature(String diskSignature) {
+		this.diskSignature = diskSignature;
+	}
+	public void setVolumeGuid(String volumeGuid) {
+		this.volumeGuid = volumeGuid;
+	}
+	public void setRevision(String revision) {
+		this.revision = revision;
+	}
+	public void setDriveName(String driveName) {
+		this.driveName = driveName;
+	}
+	public void setParentIdPrefix(String parentIdPrefix) {
+		this.parentIdPrefix = parentIdPrefix;
+	}
+	public void setSetupApiInstallDate(String setupApiInstallDate) {
+		this.setupApiInstallDate = setupApiInstallDate;
+	}
+	public void setRegistryInstallDate(String registryInstallDate) {
+		this.registryInstallDate = registryInstallDate;
+	}
+	public void setBootFirstConnectDate(String bootFirstConnectDate) {
+		this.bootFirstConnectDate = bootFirstConnectDate;
+	}
+	public void setLastConnectDate(String lastConnectDate) {
+		this.lastConnectDate = lastConnectDate;
+	}
+	public void setLastPlugUnPlugDate(String lastPlugUnPlugDate) {
+		this.lastPlugUnPlugDate = lastPlugUnPlugDate;
+	}
+	public void setUsbStorkey(String usbStorkey) {
+		this.usbStorkey = usbStorkey;
+	}
+	public void setIsBlockDate(String isBlockDate) {
+		this.isBlockDate = isBlockDate;
+	}
+	public void setDeviceUseType(Integer deviceUseType) {
+		this.deviceUseType = deviceUseType;
+	}
+	public void setSetupApiInstallHour(Integer setupApiInstallHour) {
+		this.setupApiInstallHour = setupApiInstallHour;
+	}
+	public void setRegistryInstallHour(Integer registryInstallHour) {
+		this.registryInstallHour = registryInstallHour;
+	}
+	public void setBootFirstConnectHour(Integer bootFirstConnectHour) {
+		this.bootFirstConnectHour = bootFirstConnectHour;
+	}
+	public void setLastConnectHour(Integer lastConnectHour) {
+		this.lastConnectHour = lastConnectHour;
+	}
+	public void setLastPlugUnPlugHour(Integer lastPlugUnPlugHour) {
+		this.lastPlugUnPlugHour = lastPlugUnPlugHour;
+	}
+	public void setIsBlockHour(Integer isBlockHour) {
+		this.isBlockHour = isBlockHour;
+	}
+	public void setBeforeNetworkAdapterGuid(String beforeNetworkAdapterGuid) {
+		this.beforeNetworkAdapterGuid = beforeNetworkAdapterGuid;
+	}
+	public void setBeforeNetworkAdapterName(String beforeNetworkAdapterName) {
+		this.beforeNetworkAdapterName = beforeNetworkAdapterName;
+	}
+	public void setBeforeIp(String beforeIp) {
+		this.beforeIp = beforeIp;
+	}
+	public void setAfterNetworkAdapterGuid(String afterNetworkAdapterGuid) {
+		this.afterNetworkAdapterGuid = afterNetworkAdapterGuid;
+	}
+	public void setAfterNetworkAdapterName(String afterNetworkAdapterName) {
+		this.afterNetworkAdapterName = afterNetworkAdapterName;
+	}
+	public void setAfterIp(String afterIp) {
+		this.afterIp = afterIp;
+	}
+	public void setChangeDate(String changeDate) {
+		this.changeDate = changeDate;
+	}
+	public void setSubnetMask(String subnetMask) {
+		this.subnetMask = subnetMask;
+	}
+	public void setGateway(String gateway) {
+		this.gateway = gateway;
+	}
+	public void setDnsServer(String dnsServer) {
+		this.dnsServer = dnsServer;
+	}
+	public void setChangeHour(Integer changeHour) {
+		this.changeHour = changeHour;
+	}
+	public void setNetworkName(String networkName) {
+		this.networkName = networkName;
+	}
+	public void setEncryption(String encryption) {
+		this.encryption = encryption;
+	}
+	public void setPhyType(String phyType) {
+		this.phyType = phyType;
+	}
+	public void setNetworkAdapterName(String networkAdapterName) {
+		this.networkAdapterName = networkAdapterName;
+	}
+	public void setBssid(String bssid) {
+		this.bssid = bssid;
+	}
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
+	}
+	public void setEventDate(String eventDate) {
+		this.eventDate = eventDate;
+	}
+	public void setThreadId(Integer threadId) {
+		this.threadId = threadId;
+	}
+	public void setIntegererfaceGuid(String IntegererfaceGuid) {
+		this.IntegererfaceGuid = IntegererfaceGuid;
+	}
+	public void setBssType(String bssType) {
+		this.bssType = bssType;
+	}
+	public void setEventType(String eventType) {
+		this.eventType = eventType;
+	}
+	public void setAuthentication(String authentication) {
+		this.authentication = authentication;
+	}
+	public void setBssidCompany(String bssidCompany) {
+		this.bssidCompany = bssidCompany;
+	}
+	public void setLocalMacAddress(String localMacAddress) {
+		this.localMacAddress = localMacAddress;
+	}
+	public void setConnectionMode(String connectionMode) {
+		this.connectionMode = connectionMode;
+	}
+	public void setProfileName(String profileName) {
+		this.profileName = profileName;
+	}
+	public void setDisconnectReason(String disconnectReason) {
+		this.disconnectReason = disconnectReason;
+	}
+	public void setEventRecordId(String eventRecordId) {
+		this.eventRecordId = eventRecordId;
+	}
+	public void setSsid(String ssid) {
+		this.ssid = ssid;
+	}
+	public void setIsRecovery(Integer isRecovery) {
+		this.isRecovery = isRecovery;
+	}
+	public void setKeyType(String keyType) {
+		this.keyType = keyType;
+	}
+	public void setConnectType(String connectType) {
+		this.connectType = connectType;
+	}
+	public void setPasswd(String passwd) {
+		this.passwd = passwd;
+	}
+	public void setDefaultMac(String defaultMac) {
+		this.defaultMac = defaultMac;
+	}
+	public void setLanType(Integer lanType) {
+		this.lanType = lanType;
+	}
+	public void setLocalIp(String localIp) {
+		this.localIp = localIp;
+	}
+	public void setLocalPort(String localPort) {
+		this.localPort = localPort;
+	}
+	public void setRemoteIp(String remoteIp) {
+		this.remoteIp = remoteIp;
+	}
+	public void setRemotePort(String remotePort) {
+		this.remotePort = remotePort;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public void setParentProcessId(Integer parentProcessId) {
+		this.parentProcessId = parentProcessId;
+	}
+	public void setHostUrl(String hostUrl) {
+		this.hostUrl = hostUrl;
+	}
+	public void setDirectoryUrl(String directoryUrl) {
+		this.directoryUrl = directoryUrl;
+	}
+	public void setInfoType(String infoType) {
+		this.infoType = infoType;
+	}
+	public void setSearchKeyword(String searchKeyword) {
+		this.searchKeyword = searchKeyword;
+	}
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+	public void setServerName(String serverName) {
+		this.serverName = serverName;
+	}
+	public void setServerResponse(String serverResponse) {
+		this.serverResponse = serverResponse;
+	}
+	public void setResponseCode(String responseCode) {
+		this.responseCode = responseCode;
+	}
+	public void setServerDate(String serverDate) {
+		this.serverDate = serverDate;
+	}
+	public void setServerModifyDate(String serverModifyDate) {
+		this.serverModifyDate = serverModifyDate;
+	}
+	public void setExpireDate(String expireDate) {
+		this.expireDate = expireDate;
+	}
+	public void setContentEncoding(String contentEncoding) {
+		this.contentEncoding = contentEncoding;
+	}
+	public void setSourceName(String sourceName) {
+		this.sourceName = sourceName;
+	}
+	public void setCacheControl(String cacheControl) {
+		this.cacheControl = cacheControl;
+	}
+	public void seteTag(String eTag) {
+		this.eTag = eTag;
+	}
+	public void setBlockDate(String blockDate) {
+		this.blockDate = blockDate;
+	}
+	public void setBlockHour(Integer blockHour) {
+		this.blockHour = blockHour;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public void setCmdName(String cmdName) {
+		this.cmdName = cmdName;
+	}
+	public void setCmdType(String cmdType) {
+		this.cmdType = cmdType;
+	}
+	public void setLastCmdDate(String lastCmdDate) {
+		this.lastCmdDate = lastCmdDate;
+	}
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+	public void setServiceDesc(String serviceDesc) {
+		this.serviceDesc = serviceDesc;
+	}
+	public void setServiceStatus(String serviceStatus) {
+		this.serviceStatus = serviceStatus;
+	}
+	public void setStartType(String startType) {
+		this.startType = startType;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public void setBinaryPath(String binaryPath) {
+		this.binaryPath = binaryPath;
+	}
+	public void setLastAccessDate(String lastAccessDate) {
+		this.lastAccessDate = lastAccessDate;
+	}
+	public void setRunCnt(Integer runCnt) {
+		this.runCnt = runCnt;
+	}
+	public void setInstallDate(String installDate) {
+		this.installDate = installDate;
+	}
+	public void setInstallPath(String installPath) {
+		this.installPath = installPath;
+	}
+	public void setAbout(String about) {
+		this.about = about;
+	}
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+	public void setUninstallStr(String uninstallStr) {
+		this.uninstallStr = uninstallStr;
+	}
+	public void setFileType(Integer fileType) {
+		this.fileType = fileType;
+	}
+	public void setAutorunFileInfo(String autorunFileInfo) {
+		this.autorunFileInfo = autorunFileInfo;
+	}
+	public void setSubmodulecnt(Integer subModuleCnt) {
+		this.subModuleCnt = subModuleCnt;
+	}
+	public void setPid(Integer pid) {
+		this.pid = pid;
+	}
+	public void setPpid(Integer ppid) {
+		this.ppid = ppid;
+	}
+	public void setParentProcessPath(String parentProcessPath) {
+		this.parentProcessPath = parentProcessPath;
+	}
+	public void setCpuUsage(Integer cpuUsage) {
+		this.cpuUsage = cpuUsage;
+	}
+	public void setMemoryUsage(Integer memoryUsage) {
+		this.memoryUsage = memoryUsage;
+	}
+	public void setLastAccessHour(Integer lastAccessHour) {
+		this.lastAccessHour = lastAccessHour;
+	}
+	public void setInstallHour(Integer installHour) {
+		this.installHour = installHour;
+	}
+	public void setLoginCnt(Integer loginCnt) {
+		this.loginCnt = loginCnt;
+	}
+	public void setScreenSaveTimeout(Integer screenSaveTimeout) {
+		this.screenSaveTimeout = screenSaveTimeout;
+	}
+	public void setLastLoginDate(String lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
+	}
+	public void setLastLoginFailDate(String lastLoginFailDate) {
+		this.lastLoginFailDate = lastLoginFailDate;
+	}
+	public void setChangePassDate(String changePassDate) {
+		this.changePassDate = changePassDate;
+	}
+	public void setAccountCreateDate(String accountCreateDate) {
+		this.accountCreateDate = accountCreateDate;
+	}
+	public void setHiveFileName(String hiveFileName) {
+		this.hiveFileName = hiveFileName;
+	}
+	public void setLevel(String level) {
+		this.level = level;
+	}
+	public void setEventlogId(Integer eventlogId) {
+		this.eventlogId = eventlogId;
+	}
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
+	public void setEventHour(Integer eventHour) {
+		this.eventHour = eventHour;
+	}
+	public void setMode(Integer mode) {
+		this.mode = mode;
+	}
+	public void setEventFileType(Integer eventFileType) {
+		this.eventFileType = eventFileType;
+	}
+	
+	public String getCreateDate() {
+		return createDate;
+	}
+	public String getModifyDate() {
+		return modifyDate;
+	}
+	public String getAccessDate() {
+		return accessDate;
+	}
+	public String getDiskId() {
+		return diskId;
+	}
+	public String getSid() {
+		return sid;
+	}
+	public String getComputerName() {
+		return computerName;
+	}
+	public String getFileName() {
+		return fileName;
+	}
+	public String getFilePath() {
+		return filePath;
+	}
+	public String getFileId() {
+		return fileId;
+	}
+	public String getMd5() {
+		return md5;
+	}
+	public String getSha256() {
+		return sha256;
+	}
+	public String getExt() {
+		return StringUtils.lowerCase(ext);
+	}
+	public long getSize() {
+		return size;
+	}
+	public String getVolumeName() {
+		return volumeName;
+	}
+	public Integer getLogType() {
+		return logType;
+	}
+	public String getSrcPath() {
+		return srcPath;
+	}
+	public String getContents() {
+		return contents;
+	}
+	public Integer getDeviceType() {
+		return deviceType;
+	}
+	public String getAccountName() {
+		return accountName;
+	}
+	public Integer getBrowserType() {
+		return browserType;
+	}
+	public String getProcessName() {
+		return processName;
+	}
+	public String getParentProcessName() {
+		return parentProcessName;
+	}
+	public Integer getProcessId() {
+		return processId;
+	}
+	public Integer getCreateHour() {
+		return createHour;
+	}
+	public Integer getModifyHour() {
+		return modifyHour;
+	}
+	public Integer getAccessHour() {
+		return accessHour;
+	}
+	public Category getCategory() {
+		return category;
+	}
+	public Integer getPeCnt() {
+		return peCnt;
+	}
+	public Integer getKeywordCnt() {
+		return keywordCnt;
+	}
+	public Integer getOutflowType() {
+		return outflowType;
+	}
+	public String getSrcDeviceId() {
+		return srcDeviceId;
+	}
+	public String getDestDeviceId() {
+		return destDeviceId;
+	}
+	public String getLogDate() {
+		return logDate;
+	}
+	public String getDestFileId() {
+		return destFileId;
+	}
+	public String getDestFilePath() {
+		return destFilePath;
+	}
+	public Integer getLogHour() {
+		return logHour;
+	}
+	public String getDeleteDate() {
+		return deleteDate;
+	}
+	public Integer getEncryptType() {
+		return encryptType;
+	}
+	public Integer getSignatureType() {
+		return signatureType;
+	}
+	public Integer getRecoveryType() {
+		return recoveryType;
+	}
+	public Integer getFileItemType() {
+		return fileItemType;
+	}
+	public Integer getPhysicalSize() {
+		return physicalSize;
+	}
+	public Integer getDeleteHour() {
+		return deleteHour;
+	}
+	public String getStartDate() {
+		return startDate;
+	}
+	public String getEndDate() {
+		return endDate;
+	}
+	public String getDomainName() {
+		return domainName;
+	}
+	public String getReferrer() {
+		return referrer;
+	}
+	public Integer getStatusInfo() {
+		return statusInfo;
+	}
+	public String getMimeType() {
+		return mimeType;
+	}
+	public Integer getStartHour() {
+		return startHour;
+	}
+	public Integer getEndHour() {
+		return endHour;
+	}
+	public String getLinkName() {
+		return linkName;
+	}
+	public String getProgram() {
+		return program;
+	}
+	public String getNetbios() {
+		return netbios;
+	}
+	public String getMacAddress() {
+		return macAddress;
+	}
+	public String getRegistryPath() {
+		return registryPath;
+	}
+	public String getRegistryKey() {
+		return registryKey;
+	}
+	public Integer getOffset() {
+		return offset;
+	}
+	public String getMruValue() {
+		return mruValue;
+	}
+	public String getMruType() {
+		return mruType;
+	}
+	public String getShellbagType() {
+		return shellbagType;
+	}
+	public String getZipSubfolderAccessDate() {
+		return zipSubfolderAccessDate;
+	}
+	public String getMailId() {
+		return mailId;
+	}
+	public Integer getSyncType() {
+		return syncType;
+	}
+	public Integer getSyncAction() {
+		return syncAction;
+	}
+	public Integer getIsShared() {
+		return isShared;
+	}
+	public Integer getIsFolder() {
+		return isFolder;
+	}
+	public Integer getIsLocal() {
+		return isLocal;
+	}
+	public Integer getOldPath() {
+		return oldPath;
+	}
+	public String getMappedPath() {
+		return mappedPath;
+	}
+	public String getCloudEntry() {
+		return cloudEntry;
+	}
+	public String getCc() {
+		return cc;
+	}
+	public String getBcc() {
+		return bcc;
+	}
+	public String getSubject() {
+		return subject;
+	}
+	public String getFolderName() {
+		return folderName;
+	}
+	public String getFolderPath() {
+		return folderPath;
+	}
+	public Integer getState() {
+		return state;
+	}
+	public String getDisconnectDate() {
+		return disconnectDate;
+	}
+	public String getAdminId() {
+		return adminId;
+	}
+	public Integer getDisconnectHour() {
+		return disconnectHour;
+	}
+	public String getPrintName() {
+		return printName;
+	}
+	public String getPort() {
+		return port;
+	}
+	public String getProductId() {
+		return productId;
+	}
+	public String getProductName() {
+		return productName;
+	}
+	public String getVenderId() {
+		return venderId;
+	}
+	public String getVenderName() {
+		return venderName;
+	}
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+	public String getDiskSignature() {
+		return diskSignature;
+	}
+	public String getVolumeGuid() {
+		return volumeGuid;
+	}
+	public String getRevision() {
+		return revision;
+	}
+	public String getDriveName() {
+		return driveName;
+	}
+	public String getParentIdPrefix() {
+		return parentIdPrefix;
+	}
+	public String getSetupApiInstallDate() {
+		return setupApiInstallDate;
+	}
+	public String getRegistryInstallDate() {
+		return registryInstallDate;
+	}
+	public String getBootFirstConnectDate() {
+		return bootFirstConnectDate;
+	}
+	public String getLastConnectDate() {
+		return lastConnectDate;
+	}
+	public String getLastPlugUnPlugDate() {
+		return lastPlugUnPlugDate;
+	}
+	public String getUsbStorkey() {
+		return usbStorkey;
+	}
+	public String getIsBlockDate() {
+		return isBlockDate;
+	}
+	public Integer getDeviceUseType() {
+		return deviceUseType;
+	}
+	public Integer getSetupApiInstallHour() {
+		return setupApiInstallHour;
+	}
+	public Integer getRegistryInstallHour() {
+		return registryInstallHour;
+	}
+	public Integer getBootFirstConnectHour() {
+		return bootFirstConnectHour;
+	}
+	public Integer getLastConnectHour() {
+		return lastConnectHour;
+	}
+	public Integer getLastPlugUnPlugHour() {
+		return lastPlugUnPlugHour;
+	}
+	public Integer getIsBlockHour() {
+		return isBlockHour;
+	}
+	public String getBeforeNetworkAdapterGuid() {
+		return beforeNetworkAdapterGuid;
+	}
+	public String getBeforeNetworkAdapterName() {
+		return beforeNetworkAdapterName;
+	}
+	public String getBeforeIp() {
+		return beforeIp;
+	}
+	public String getAfterNetworkAdapterGuid() {
+		return afterNetworkAdapterGuid;
+	}
+	public String getAfterNetworkAdapterName() {
+		return afterNetworkAdapterName;
+	}
+	public String getAfterIp() {
+		return afterIp;
+	}
+	public String getChangeDate() {
+		return changeDate;
+	}
+	public String getSubnetMask() {
+		return subnetMask;
+	}
+	public String getGateway() {
+		return gateway;
+	}
+	public String getDnsServer() {
+		return dnsServer;
+	}
+	public Integer getChangeHour() {
+		return changeHour;
+	}
+	public String getNetworkName() {
+		return networkName;
+	}
+	public String getEncryption() {
+		return encryption;
+	}
+	public String getPhyType() {
+		return phyType;
+	}
+	public String getNetworkAdapterName() {
+		return networkAdapterName;
+	}
+	public String getBssid() {
+		return bssid;
+	}
+	public String getEventId() {
+		return eventId;
+	}
+	public String getEventDate() {
+		return eventDate;
+	}
+	public Integer getThreadId() {
+		return threadId;
+	}
+	public String getIntegererfaceGuid() {
+		return IntegererfaceGuid;
+	}
+	public String getBssType() {
+		return bssType;
+	}
+	public String getEventType() {
+		return eventType;
+	}
+	public String getAuthentication() {
+		return authentication;
+	}
+	public String getBssidCompany() {
+		return bssidCompany;
+	}
+	public String getLocalMacAddress() {
+		return localMacAddress;
+	}
+	public String getConnectionMode() {
+		return connectionMode;
+	}
+	public String getProfileName() {
+		return profileName;
+	}
+	public String getDisconnectReason() {
+		return disconnectReason;
+	}
+	public String getEventRecordId() {
+		return eventRecordId;
+	}
+	public String getSsid() {
+		return ssid;
+	}
+	public Integer getIsRecovery() {
+		return isRecovery;
+	}
+	public String getKeyType() {
+		return keyType;
+	}
+	public String getConnectType() {
+		return connectType;
+	}
+	public String getPasswd() {
+		return passwd;
+	}
+	public String getDefaultMac() {
+		return defaultMac;
+	}
+	public Integer getLanType() {
+		return lanType;
+	}
+	public String getLocalIp() {
+		return localIp;
+	}
+	public String getLocalPort() {
+		return localPort;
+	}
+	public String getRemoteIp() {
+		return remoteIp;
+	}
+	public String getRemotePort() {
+		return remotePort;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public Integer getParentProcessId() {
+		return parentProcessId;
+	}
+	public String getHostUrl() {
+		return hostUrl;
+	}
+	public String getDirectoryUrl() {
+		return directoryUrl;
+	}
+	public String getInfoType() {
+		return infoType;
+	}
+	public String getSearchKeyword() {
+		return searchKeyword;
+	}
+	public String getContentType() {
+		return contentType;
+	}
+	public String getServerName() {
+		return serverName;
+	}
+	public String getServerResponse() {
+		return serverResponse;
+	}
+	public String getResponseCode() {
+		return responseCode;
+	}
+	public String getServerDate() {
+		return serverDate;
+	}
+	public String getServerModifyDate() {
+		return serverModifyDate;
+	}
+	public String getExpireDate() {
+		return expireDate;
+	}
+	public String getContentEncoding() {
+		return contentEncoding;
+	}
+	public String getSourceName() {
+		return sourceName;
+	}
+	public String getCacheControl() {
+		return cacheControl;
+	}
+	public String geteTag() {
+		return eTag;
+	}
+	public String getBlockDate() {
+		return blockDate;
+	}
+	public Integer getBlockHour() {
+		return blockHour;
+	}
+	public String getId() {
+		return id;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public String getCmdName() {
+		return cmdName;
+	}
+	public String getCmdType() {
+		return cmdType;
+	}
+	public String getLastCmdDate() {
+		return lastCmdDate;
+	}
+	public String getServiceName() {
+		return serviceName;
+	}
+	public String getServiceDesc() {
+		return serviceDesc;
+	}
+	public String getServiceStatus() {
+		return serviceStatus;
+	}
+	public String getStartType() {
+		return startType;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public String getBinaryPath() {
+		return binaryPath;
+	}
+	public String getLastAccessDate() {
+		return lastAccessDate;
+	}
+	public Integer getRunCnt() {
+		return runCnt;
+	}
+	public String getInstallDate() {
+		return installDate;
+	}
+	public String getInstallPath() {
+		return installPath;
+	}
+	public String getAbout() {
+		return about;
+	}
+	public String getPublisher() {
+		return publisher;
+	}
+	public String getUninstallStr() {
+		return uninstallStr;
+	}
+	public Integer getFileType() {
+		return fileType;
+	}
+	public String getAutorunFileInfo() {
+		return autorunFileInfo;
+	}
+	public Integer getSubModulCcnt() {
+		return subModuleCnt;
+	}
+	public Integer getPid() {
+		return pid;
+	}
+	public Integer getPpid() {
+		return ppid;
+	}
+	public String getParentProcessPath() {
+		return parentProcessPath;
+	}
+	public Integer getCpuUsage() {
+		return cpuUsage;
+	}
+	public Integer getMemoryUsage() {
+		return memoryUsage;
+	}
+	public Integer getLastAccessHour() {
+		return lastAccessHour;
+	}
+	public Integer getInstallHour() {
+		return installHour;
+	}
+	public Integer getLoginCnt() {
+		return loginCnt;
+	}
+	public Integer getScreenSaveTimeout() {
+		return screenSaveTimeout;
+	}
+	public String getLastLoginDate() {
+		return lastLoginDate;
+	}
+	public String getLastLoginFailDate() {
+		return lastLoginFailDate;
+	}
+	public String getChangePassDate() {
+		return changePassDate;
+	}
+	public String getAccountCreateDate() {
+		return accountCreateDate;
+	}
+	public String getHiveFileName() {
+		return hiveFileName;
+	}
+	public String getLevel() {
+		return level;
+	}
+	public Integer getEventlogId() {
+		return eventlogId;
+	}
+	public String getEventName() {
+		return eventName;
+	}
+	public Integer getEventHour() {
+		return eventHour;
+	}
+	public Integer getMode() {
+		return mode;
+	}
+	public Integer getEventFileType() {
+		return eventFileType;
+	}
+	public String getPeDetail() {
+		return peDetail;
+	}
+	public void setPeDetail(String peDetail) {
+		this.peDetail = peDetail;
+	}
+	public String getKeywordDetail() {
+		return keywordDetail;
+	}
+	public void setKeywordDetail(String keywordDetail) {
+		this.keywordDetail = keywordDetail;
+	}
+	public Integer getIsRiskFile() {
+		return isRiskFile;
+	}
+	public void setIsRiskFile(Integer isRiskFile) {
+		this.isRiskFile = isRiskFile;
+	}
+	public String getRiskFileDESC() {
+		return riskFileDESC;
+	}
+	public void setRiskFileDESC(String riskFileDESC) {
+		this.riskFileDESC = riskFileDESC;
+	}
+	public String getLastAccDate() {
+		return lastAccDate;
+	}
+	public void setLastAccDate(String lastAccDate) {
+		this.lastAccDate = lastAccDate;
+	}
+	public Integer getLastAccHour() {
+		return lastAccHour;
+	}
+	public void setLastAccHour(Integer lastAccHour) {
+		this.lastAccHour = lastAccHour;
+	}
+	public Integer getSubModuleCnt() {
+		return subModuleCnt;
+	}
+	public void setSubModuleCnt(Integer subModuleCnt) {
+		this.subModuleCnt = subModuleCnt;
+	}
+	public Integer getAnalysisType() {
+		return analysisType;
+	}
+	public void setAnalysisType(Integer analysisType) {
+		this.analysisType = analysisType;
+	}
+	public String getAnalysisDESC() {
+		return analysisDESC;
+	}
+	public void setAnalysisDESC(String analysisDESC) {
+		this.analysisDESC = analysisDESC;
+	}
+	public Integer getDangerFlag() {
+		return dangerFlag;
+	}
+	public void setDangerFlag(Integer dangerFlag) {
+		this.dangerFlag = dangerFlag;
+	}
+	public String getAutoRunName() {
+		return autoRunName;
+	}
+	public void setAutoRunName(String autoRunName) {
+		this.autoRunName = autoRunName;
+	}
+	public Integer getAutoRunType() {
+		return autoRunType;
+	}
+	public void setAutoRunType(Integer autoRunType) {
+		this.autoRunType = autoRunType;
+	}
+	public String getVersion() {
+		return version;
+	}
+	public void setVersion(String version) {
+		this.version = version;
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	public String getMailPath() {
+		return mailPath;
+	}
+	public void setMailPath(String mailPath) {
+		this.mailPath = mailPath;
+	}
+	public String getSender() {
+		return sender;
+	}
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+	public String getRecipients() {
+		return recipients;
+	}
+	public void setRecipients(String recipients) {
+		this.recipients = recipients;
+	}
+	public String getRecvDate() {
+		return recvDate;
+	}
+	public void setRecvDate(String recvDate) {
+		this.recvDate = recvDate;
+	}
+	public String getAttFileCnt() {
+		return attFileCnt;
+	}
+	public void setAttFileCnt(String attFileCnt) {
+		this.attFileCnt = attFileCnt;
+	}
+	public String getIsContentSaved() {
+		return isContentSaved;
+	}
+	public void setIsContentSaved(String isContentSaved) {
+		this.isContentSaved = isContentSaved;
+	}
+	public String getSendDate() {
+		return sendDate;
+	}
+	public void setSendDate(String sendDate) {
+		this.sendDate = sendDate;
+	}
+	public Integer getIsMacro() {
+		return isMacro;
+	}
+	public void setIsMacro(Integer isMacro) {
+		this.isMacro = isMacro;
+	}
+	public Integer getIsCodesign() {
+		return isCodesign;
+	}
+	public void setIsCodesign(Integer isCodesign) {
+		this.isCodesign = isCodesign;
+	}
+	public Integer getIsMatchName() {
+		return isMatchName;
+	}
+	public void setIsMatchName(Integer isMatchName) {
+		this.isMatchName = isMatchName;
+	}
+	public Integer getOutflowSubType() {
+		return outflowSubType;
+	}
+	public void setOutflowSubType(Integer outflowSubType) {
+		this.outflowSubType = outflowSubType;
+	}
+	public Integer getIsEncrypt() {
+		return isEncrypt;
+	}
+	public void setIsEncrypt(Integer isEncrypt) {
+		this.isEncrypt = isEncrypt;
+	}
+	public Integer getIsAutoEncrypt() {
+		return isAutoEncrypt;
+	}
+	public void setIsAutoEncrypt(Integer isAutoEncrypt) {
+		this.isAutoEncrypt = isAutoEncrypt;
+	}
+	public Integer getIsBlock() {
+		return isBlock;
+	}
+	public void setIsBlock(Integer isBlock) {
+		this.isBlock = isBlock;
+	}
+	public Integer getIsDelete() {
+		return isDelete;
+	}
+	public void setIsDelete(Integer isDelete) {
+		this.isDelete = isDelete;
+	}
+	public Integer getNetworkLinkYn() {
+		return networkLinkYn;
+	}
+	public void setNetworkLinkYn(Integer networkLinkYn) {
+		this.networkLinkYn = networkLinkYn;
+	}
+	public int getDefaultPrint() {
+		return defaultPrint;
+	}
+	public void setDefaultPrint(int defaultPrint) {
+		this.defaultPrint = defaultPrint;
+	}
+	public Integer getIsExceptPrint() {
+		return isExceptPrint;
+	}
+	public void setIsExceptPrint(Integer isExceptPrint) {
+		this.isExceptPrint = isExceptPrint;
+	}
+	public Integer getIsExcept() {
+		return isExcept;
+	}
+	public void setIsExcept(Integer isExcept) {
+		this.isExcept = isExcept;
+	}
+	public Integer getIsSearchUrl() {
+		return isSearchUrl;
+	}
+	public void setIsSearchUrl(Integer isSearchUrl) {
+		this.isSearchUrl = isSearchUrl;
+	}
+	public Integer getIsBlackList() {
+		return isBlackList;
+	}
+	public void setIsBlackList(Integer isBlackList) {
+		this.isBlackList = isBlackList;
+	}
+	public Integer getIsHide() {
+		return isHide;
+	}
+	public void setIsHide(Integer isHide) {
+		this.isHide = isHide;
+	}
+	public Integer getIsScreenSave() {
+		return isScreenSave;
+	}
+	public void setIsScreenSave(Integer isScreenSave) {
+		this.isScreenSave = isScreenSave;
+	}
+	public String getDeleteName() {
+		return deleteName;
+	}
+	public void setDeleteName(String deleteName) {
+		this.deleteName = deleteName;
+	}
+	public Integer getDeleteType() {
+		return deleteType;
+	}
+	public void setDeleteType(Integer deleteType) {
+		this.deleteType = deleteType;
+	}
+	public String getInfoId() {
+		return infoId;
+	}
+	public void setInfoId(String infoId) {
+		this.infoId = infoId;
+	}
+	public String getIdx() {
+		return idx;
+	}
+	public void setIdx(String idx) {
+		this.idx = idx;
+	}
+	public Integer getPeType() {
+		return peType;
+	}
+	public void setPeType(Integer peType) {
+		this.peType = peType;
+	}
+	public HashMap<String, String> getJoinType() {
+		return joinType;
+	}
+	public void setJoinType(HashMap<String, String> joinType) {
+		this.joinType = joinType;
+	}
+	
+	
+	public void setColumn(){
+		
+		if(StringUtils.isNotEmpty(createDate)) {
+			setCreateHour(CommonUtils.getHourToDateString(createDate));
+		}
+		if(StringUtils.isNotEmpty(modifyDate)) {
+			setModifyHour(CommonUtils.getHourToDateString(modifyDate));
+		}
+		if(StringUtils.isNotEmpty(accessDate)) {
+			setAccessHour(CommonUtils.getHourToDateString(accessDate));
+		}
+		if(StringUtils.isNotEmpty(logDate)) {
+			setLogHour(CommonUtils.getHourToDateString(logDate));
+		}
+		if(StringUtils.isNotEmpty(deleteDate)) {
+			setDeleteHour(CommonUtils.getHourToDateString(deleteDate));
+		}
+		if(StringUtils.isNotEmpty(startDate)) {
+			setStartHour(CommonUtils.getHourToDateString(startDate));
+		}
+		if(StringUtils.isNotEmpty(endDate)) {
+			setEndHour(CommonUtils.getHourToDateString(endDate));
+		}
+		if(StringUtils.isNotEmpty(disconnectDate)) {
+			setDisconnectHour(CommonUtils.getHourToDateString(disconnectDate));
+		}
+		if(StringUtils.isNotEmpty(setupApiInstallDate)) {
+			setSetupApiInstallHour(CommonUtils.getHourToDateString(setupApiInstallDate));
+		}
+		if(StringUtils.isNotEmpty(registryInstallDate)) {
+			setRegistryInstallHour(CommonUtils.getHourToDateString(registryInstallDate));
+		}
+		if(StringUtils.isNotEmpty(bootFirstConnectDate)) {
+			setBootFirstConnectHour(CommonUtils.getHourToDateString(bootFirstConnectDate));
+		}
+		if(StringUtils.isNotEmpty(lastConnectDate)) {
+			setLastConnectHour(CommonUtils.getHourToDateString(lastConnectDate));
+		}
+		if(StringUtils.isNotEmpty(lastPlugUnPlugDate)) {
+			setLastPlugUnPlugHour(CommonUtils.getHourToDateString(lastPlugUnPlugDate));
+		}
+		if(StringUtils.isNotEmpty(isBlockDate)) {
+			setIsBlockHour(CommonUtils.getHourToDateString(isBlockDate));
+		}
+		if(StringUtils.isNotEmpty(changeDate)) {
+			setChangeHour(CommonUtils.getHourToDateString(changeDate));
+		}
+		if(StringUtils.isNotEmpty(blockDate)) {
+			setBlockHour(CommonUtils.getHourToDateString(blockDate));
+		}
+		if(StringUtils.isNotEmpty(lastAccessDate)) {
+			setLastAccessHour(CommonUtils.getHourToDateString(lastAccessDate));
+		}
+		if(StringUtils.isNotEmpty(installDate)) {
+			setInstallHour(CommonUtils.getHourToDateString(installDate));
+		}
+		if(StringUtils.isNotEmpty(eventDate)) {
+			setEventHour(CommonUtils.getHourToDateString(eventDate));
+		}
+		if(StringUtils.isNotEmpty(lastAccDate)) {
+			setLastAccHour(CommonUtils.getHourToDateString(lastAccDate));
+		}
+		if(StringUtils.isNotEmpty(contents)) {
+			Category category = CommonUtils.getCategories(contents);
+			setCategory(category);
+		}
+		
+		//JoinType 생성
+		//parent부분에 부모의 documentId를 입력해야함.
+		if(getAppName().equals(AppName.FILE) || getAppName().equals(AppName.MAIL)) {
+			HashMap<String, String> m = new HashMap<String, String>();
+			m.put("name", "parent");
+			setJoinType(m);
+		} else if(getAppName().equals(AppName.FILE_CONTENTS)) {
+			String appName = "";
+			String childName = "";
+			String docId = "";
+			if(this.fileType == 1 || this.fileType == 2) {
+				appName = AppName.MAIL_ATTFILE;
+				childName = "mailFileContents";
+				docId = getFileId() + getMd5(); 
+			} else {
+				appName = AppName.FILE;
+				childName = "fileContents";
+				docId = getMd5(); 
+			}
+			String prefix = getCustomerId() + "_" +  getAgentId() + "_" + appName + "_";			
+			HashMap<String, String> m = new HashMap<String, String>();
+			m.put("name", childName);
+			m.put("parent", prefix+docId);
+			setJoinType(m);
+		} else if(getAppName().equals(AppName.MAIL_ATTFILE)) {
+			String prefix = getCustomerId() + "_" +  getAgentId() + "_" + AppName.MAIL + "_";			
+			HashMap<String, String> m = new HashMap<String, String>();
+			m.put("name", "mailFile");
+			m.put("parent", prefix+getMailId());
+			setJoinType(m);
+		} 
+		
+	}
+	@Override
+	public String toString() {
+		return "CommonType [createDate=" + createDate + ", modifyDate="
+				+ modifyDate + ", accessDate=" + accessDate + ", diskId="
+				+ diskId + ", sid=" + sid + ", computerName=" + computerName
+				+ ", fileName=" + fileName + ", filePath=" + filePath
+				+ ", fileId=" + fileId + ", md5=" + md5 + ", sha256=" + sha256
+				+ ", ext=" + ext + ", size=" + size + ", volumeName="
+				+ volumeName + ", logType=" + logType + ", isEncrypt="
+				+ isEncrypt + ", srcPath=" + srcPath + ", contents=" + contents
+				+ ", deviceType=" + deviceType + ", accountName=" + accountName
+				+ ", browserType=" + browserType + ", processName="
+				+ processName + ", parentProcessName=" + parentProcessName
+				+ ", processId=" + processId + ", createHour=" + createHour
+				+ ", modifyHour=" + modifyHour + ", accessHour=" + accessHour
+				+ ", category=" + category + ", peCnt=" + peCnt
+				+ ", keywordCnt=" + keywordCnt + ", outflowType=" + outflowType
+				+ ", srcDeviceId=" + srcDeviceId + ", destDeviceId="
+				+ destDeviceId + ", logDate=" + logDate + ", isAutoEncrypt="
+				+ isAutoEncrypt + ", isBlock=" + isBlock + ", destFileId="
+				+ destFileId + ", destFilePath=" + destFilePath + ", peDetail="
+				+ peDetail + ", keywordDetail=" + keywordDetail
+				+ ", outflowSubType=" + outflowSubType + ", logHour=" + logHour
+				+ ", isDelete=" + isDelete + ", deleteDate=" + deleteDate
+				+ ", encryptType=" + encryptType + ", signatureType="
+				+ signatureType + ", recoveryType=" + recoveryType
+				+ ", fileItemType=" + fileItemType + ", physicalSize="
+				+ physicalSize + ", deleteHour=" + deleteHour + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", domainName="
+				+ domainName + ", referrer=" + referrer + ", statusInfo="
+				+ statusInfo + ", mimeType=" + mimeType + ", companyName="
+				+ companyName + ", isMacro=" + isMacro + ", isCodesign="
+				+ isCodesign + ", isMatchName=" + isMatchName + ", startHour="
+				+ startHour + ", endHour=" + endHour + ", linkName=" + linkName
+				+ ", networkLinkYn=" + networkLinkYn + ", program=" + program
+				+ ", netbios=" + netbios + ", macAddress=" + macAddress
+				+ ", registryPath=" + registryPath + ", registryKey="
+				+ registryKey + ", offset=" + offset + ", mruValue=" + mruValue
+				+ ", mruType=" + mruType + ", shellbagType=" + shellbagType
+				+ ", zipSubfolderAccessDate=" + zipSubfolderAccessDate
+				+ ", isRiskFile=" + isRiskFile + ", riskFileDESC="
+				+ riskFileDESC + ", lastAccDate=" + lastAccDate
+				+ ", lastAccHour=" + lastAccHour + ", mailId=" + mailId
+				+ ", syncType=" + syncType + ", syncAction=" + syncAction
+				+ ", isShared=" + isShared + ", isFolder=" + isFolder
+				+ ", isLocal=" + isLocal + ", oldPath=" + oldPath
+				+ ", mappedPath=" + mappedPath + ", cloudEntry=" + cloudEntry
+				+ ", subject=" + subject + ", mailPath=" + mailPath
+				+ ", sender=" + sender + ", cc=" + cc + ", bcc=" + bcc
+				+ ", recipients=" + recipients + ", recvDate=" + recvDate
+				+ ", attFileCnt=" + attFileCnt + ", isContentSaved="
+				+ isContentSaved + ", sendDate=" + sendDate + ", folderName="
+				+ folderName + ", folderPath=" + folderPath + ", state="
+				+ state + ", disconnectDate=" + disconnectDate + ", adminId="
+				+ adminId + ", disconnectHour=" + disconnectHour
+				+ ", printName=" + printName + ", defaultPrint="
+				+ defaultPrint + ", port=" + port + ", isExceptprint="
+				+ isExceptPrint + ", productId=" + productId
+				+ ", productName=" + productName + ", venderId=" + venderId
+				+ ", venderName=" + venderName + ", serialNumber="
+				+ serialNumber + ", diskSignature=" + diskSignature
+				+ ", volumeGuid=" + volumeGuid + ", revision=" + revision
+				+ ", driveName=" + driveName + ", parentIdPrefix="
+				+ parentIdPrefix + ", setupApiInstallDate="
+				+ setupApiInstallDate + ", registryInstallDate="
+				+ registryInstallDate + ", bootFirstConnectDate="
+				+ bootFirstConnectDate + ", lastConnectDate=" + lastConnectDate
+				+ ", lastPlugUnPlugDate=" + lastPlugUnPlugDate
+				+ ", usbStorkey=" + usbStorkey + ", isBlockDate=" + isBlockDate
+				+ ", isExcept=" + isExcept + ", deviceUseType=" + deviceUseType
+				+ ", setupApiInstallHour=" + setupApiInstallHour
+				+ ", registryInstallHour=" + registryInstallHour
+				+ ", bootFirstConnectHour=" + bootFirstConnectHour
+				+ ", lastConnectHour=" + lastConnectHour
+				+ ", lastPlugUnPlugHour=" + lastPlugUnPlugHour
+				+ ", isBlockHour=" + isBlockHour
+				+ ", beforeNetworkAdapterGuid=" + beforeNetworkAdapterGuid
+				+ ", beforeNetworkAdapterName=" + beforeNetworkAdapterName
+				+ ", beforeIp=" + beforeIp + ", afterNetworkAdapterGuid="
+				+ afterNetworkAdapterGuid + ", afterNetworkAdapterName="
+				+ afterNetworkAdapterName + ", afterIp=" + afterIp
+				+ ", changeDate=" + changeDate + ", subnetMask=" + subnetMask
+				+ ", gateway=" + gateway + ", dnsServer=" + dnsServer
+				+ ", changeHour=" + changeHour + ", networkName=" + networkName
+				+ ", encryption=" + encryption + ", phyType=" + phyType
+				+ ", networkAdapterName=" + networkAdapterName + ", bssid="
+				+ bssid + ", eventId=" + eventId + ", eventDate=" + eventDate
+				+ ", threadId=" + threadId + ", IntegererfaceGuid="
+				+ IntegererfaceGuid + ", bssType=" + bssType + ", eventType="
+				+ eventType + ", authentication=" + authentication
+				+ ", bssidCompany=" + bssidCompany + ", localMacAddress="
+				+ localMacAddress + ", connectionMode=" + connectionMode
+				+ ", profileName=" + profileName + ", disconnectReason="
+				+ disconnectReason + ", eventRecordId=" + eventRecordId
+				+ ", ssid=" + ssid + ", isRecovery=" + isRecovery
+				+ ", keyType=" + keyType + ", connectType=" + connectType
+				+ ", passwd=" + passwd + ", defaultMac=" + defaultMac
+				+ ", lanType=" + lanType + ", localIp=" + localIp
+				+ ", localPort=" + localPort + ", remoteIp=" + remoteIp
+				+ ", remotePort=" + remotePort + ", status=" + status
+				+ ", parentProcessId=" + parentProcessId + ", hostUrl="
+				+ hostUrl + ", directoryUrl=" + directoryUrl + ", infoType="
+				+ infoType + ", isSearchUrl=" + isSearchUrl
+				+ ", searchKeyword=" + searchKeyword + ", isBlackList="
+				+ isBlackList + ", contentType=" + contentType
+				+ ", serverName=" + serverName + ", serverResponse="
+				+ serverResponse + ", responseCode=" + responseCode
+				+ ", serverDate=" + serverDate + ", serverModifyDate="
+				+ serverModifyDate + ", expireDate=" + expireDate
+				+ ", contentEncoding=" + contentEncoding + ", sourceName="
+				+ sourceName + ", cacheControl=" + cacheControl + ", eTag="
+				+ eTag + ", blockDate=" + blockDate + ", blockHour="
+				+ blockHour + ", id=" + id + ", password=" + password
+				+ ", cmdName=" + cmdName + ", cmdType=" + cmdType
+				+ ", lastCmdDate=" + lastCmdDate + ", serviceName="
+				+ serviceName + ", serviceDesc=" + serviceDesc
+				+ ", serviceStatus=" + serviceStatus + ", startType="
+				+ startType + ", userName=" + userName + ", binaryPath="
+				+ binaryPath + ", lastAccessDate=" + lastAccessDate
+				+ ", runCnt=" + runCnt + ", installDate=" + installDate
+				+ ", installPath=" + installPath + ", about=" + about
+				+ ", publisher=" + publisher + ", uninstallStr=" + uninstallStr
+				+ ", fileType=" + fileType + ", autorunFileInfo="
+				+ autorunFileInfo + ", subModuleCnt=" + subModuleCnt + ", pid="
+				+ pid + ", ppid=" + ppid + ", parentProcessPath="
+				+ parentProcessPath + ", cpuUsage=" + cpuUsage
+				+ ", memoryUsage=" + memoryUsage + ", isHide=" + isHide
+				+ ", lastAccessHour=" + lastAccessHour + ", installHour="
+				+ installHour + ", loginCnt=" + loginCnt + ", isScreenSave="
+				+ isScreenSave + ", screenSaveTimeout=" + screenSaveTimeout
+				+ ", lastLoginDate=" + lastLoginDate + ", lastLoginFailDate="
+				+ lastLoginFailDate + ", changePassDate=" + changePassDate
+				+ ", accountCreateDate=" + accountCreateDate
+				+ ", hiveFileName=" + hiveFileName + ", level=" + level
+				+ ", eventlogId=" + eventlogId + ", eventName=" + eventName
+				+ ", eventHour=" + eventHour + ", mode=" + mode
+				+ ", eventFileType=" + eventFileType + ", analysisType="
+				+ analysisType + ", analysisDESC=" + analysisDESC
+				+ ", dangerFlag=" + dangerFlag + ", autoRunName=" + autoRunName
+				+ ", autoRunType=" + autoRunType + ", version=" + version + "]";
+	}
+	
+}

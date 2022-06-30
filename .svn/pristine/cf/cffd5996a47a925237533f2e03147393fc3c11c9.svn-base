@@ -1,0 +1,359 @@
+package com.demo.apiserver.message.common;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.StringUtils;
+import org.nibor.autolink.LinkExtractor;
+import org.nibor.autolink.LinkSpan;
+
+import com.demo.apiserver.message.domain.Category;
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Charsets;
+import com.google.common.hash.Hashing;
+
+public class CommonUtils {
+    private final static DateTimeFormatter DEFAULT_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+    public static String urlDecode(String URL) {
+
+        String urlString = "";
+        try {
+            urlString = URLDecoder.decode(URL, CharEncoding.UTF_8);
+        } catch (UnsupportedEncodingException e) {
+        }
+
+        return urlString;
+
+    }
+
+    public static String urlEncode(String URL) {
+
+        String urlString = "";
+        try {
+            urlString = URLEncoder.encode(URL, CharEncoding.UTF_8);
+        } catch (UnsupportedEncodingException e) {
+        }
+
+        return urlString;
+
+    }
+
+    public static String md5(String source) {
+        /**
+         * DigestUtils.md5DigestAsHex(source.getBytes());
+         * 이렇게 해도 되는데spring util 보다 guava util이 cpu을 약간(?) 덜 사용하는 듯 해서 사용
+         */
+        return Hashing.md5().hashString(source, Charsets.UTF_8).toString();
+    }
+
+    public static String unescape(String src) {
+        // src = src.replaceAll("&", "&amp;");
+        // src = src.replaceAll("<", "&lt;");
+        // src = src.replaceAll(">", "&gt;");
+
+        StringBuffer tmp = new StringBuffer();
+        tmp.ensureCapacity(src.length());
+        int count = 0;
+        int lastPos = 0, pos = 0;
+        String re = "";
+        while (lastPos < src.length()) {
+            pos = src.indexOf("%", lastPos);
+            if (pos == lastPos) {
+                if (src.charAt(pos + 1) == 'u') {
+                    count = 1;
+                    break;
+                } else {
+                    lastPos++;
+                }
+            } else {
+                lastPos++;
+            }
+        }
+
+        if (count == 1) {
+            re = unescapeUnicode(src);
+        } else {
+            try {
+                re = URLDecoder.decode(src, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return re;
+    }
+
+    public static String unescapeUnicode(String src) {
+        StringBuffer tmp = new StringBuffer();
+        tmp.ensureCapacity(src.length());
+        int lastPos = 0, pos = 0;
+        char ch;
+        while (lastPos < src.length()) {
+            pos = src.indexOf("%", lastPos);
+            if (pos == lastPos) {
+                if (src.charAt(pos + 1) == 'u') {
+                    // System.out.println(src.substring(pos + 2, pos + 6));
+                    ch = (char) Integer.parseInt(src.substring(pos + 2, pos + 6), 16);
+                    tmp.append(ch);
+                    lastPos = pos + 6;
+                } else {
+                    ch = (char) Integer.parseInt(src.substring(pos + 1, pos + 3), 16);
+                    tmp.append(ch);
+                    lastPos = pos + 3;
+                }
+            } else {
+                if (pos == -1) {
+                    // System.out.println("1 :" + src.substring(lastPos));
+                    tmp.append(src.substring(lastPos));
+                    lastPos = src.length();
+                } else {
+                    // System.out.println("2 : " + src.substring(lastPos, pos));
+                    tmp.append(src.substring(lastPos, pos).replace("+", " "));
+
+                    // System.out.println("2 : " + src.substring(lastPos, pos));
+                    lastPos = pos;
+                }
+            }
+        }
+        return tmp.toString();
+    }
+
+    public static String decompressGzip(byte[] compressedData) throws IOException {
+        byte[] buffer = new byte[compressedData.length];
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(compressedData));
+        for (int bytesRead = 0; bytesRead != -1; bytesRead = in.read(buffer)) {
+            out.write(buffer, 0, bytesRead);
+        }
+        return new String(out.toByteArray(), "UTF-8");
+    }
+
+
+    public static byte[] compressGzip(String input) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        GZIPOutputStream in = new GZIPOutputStream(out);
+        in.write(input.getBytes("UTF-8"));
+        in.close();
+
+        return out.toByteArray();
+    }
+
+    public static byte[] compressGzipFromByte(byte[] input) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        GZIPOutputStream in = new GZIPOutputStream(out);
+        in.write(input);
+        in.close();
+
+        return out.toByteArray();
+    }
+
+    public static String millisecondsRemove(Timestamp timestamp) {
+        if (timestamp == null)
+            return null;
+        String ts = timestamp.toString();
+        return ts.substring(0, ts.indexOf("."));
+    }
+
+    public static String uuid() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+
+    public static Timestamp getDefaultStringDate(String s) {
+        if ("".equals(s))
+            return null;
+
+        LocalDateTime date = LocalDateTime.parse(s, DEFAULT_DATETIME_FORMAT);
+        return Timestamp.valueOf(date);
+
+    }
+
+    public static String getTimeZoneString(String s) {
+        if (s == null) {
+            //TODO 테스트 데이터에 timezone 값이 없어서 아래와 같이 처리함
+            s = "(UTC+09:00) 서울";
+            //return "";
+        }
+        return CharMatcher.is('+').or(CharMatcher.is('-')).or(CharMatcher.DIGIT).retainFrom(s);
+    }
+
+    public static String getNullDateToString(String s) {
+        if (s == null)
+            return "00000000'T'000000";
+        return s;
+    }
+
+    public static String getDomainName(String s) {
+        // guava InternetDomainName.from(host).toString()으로 domain을 뽑을 수 있으나
+        // drive.google.com도 google.com으로 분리하는 문제로 아래와 같이 일단 처리
+        if(s.startsWith("?")) return "";
+        try {
+            s = s.replaceAll("\\P{Print}", "");
+            if(s.indexOf("http") != 1) {
+                s = s.substring(s.indexOf("http"));
+            }
+            s = s.replaceFirst("^(http://www\\.|http://|https://www\\.|https://|www\\.|img\\.)", "");
+        } catch (Exception e) {
+            return "";
+        }
+        return s;
+    }
+
+    public static int getHourToDateString(String s) {
+        //yyyyMMdd'T'HHmmss 포멧이면 (구지 날짜 포멧으로 변경해서 시간값을 뽑을 필요는 없을 것 같다)
+        if (s == null)
+            return 0;
+        else if (s.length() == 16) {
+            String hour = s.substring(9, 11);
+            try {
+                return Integer.parseInt(hour);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
+    }
+
+    public static List<String> emailExtract(String s) {
+        if (s == null)
+            return Collections.emptyList();
+        s = s.replaceAll("'", "");
+        ArrayList<String> emailStrings = new ArrayList<String>();
+        for (String email : s.split(",")) {
+            if (email.indexOf("@") > 0) {
+                emailStrings.add(emailExtractToString(email));
+            }
+        }
+        return emailStrings;
+        //return String.join(",", emailStrings);
+    }
+
+    public static String emailExtractToString(String s) {
+        LinkExtractor linkExtractor = LinkExtractor.builder().build();
+        Iterable<LinkSpan> links = null;
+        String email = null;
+        try {
+            links = linkExtractor.extractLinks(s);
+            LinkSpan link = links.iterator().next();
+            email = s.substring(link.getBeginIndex(), link.getEndIndex());
+        } catch (java.util.NoSuchElementException e) {
+            email = s;
+        }
+
+        return email;
+
+    }
+
+    public static void main(String... args) {
+        String s = "src=\\\"https://t.google.com";
+        s = s.substring(s.indexOf("http"));
+        s = s.replaceFirst("^(http://www\\.|http://|https://www\\.|https://|www\\.|img\\.)", "");
+        System.out.println(s);
+    }
+    
+    public static Category getCategories(String contents) {
+        if (contents == null) {
+            return null;
+        }
+
+        Category category = new Category();
+        HashMap<String, String> regExpMap = new HashMap<String, String>();
+
+        regExpMap.put("email", Constants.EMAIL);
+        regExpMap.put("ip", Constants.IPV4);
+        regExpMap.put("url", Constants.URL);
+        regExpMap.put("bank", Constants.ACCOUNT_NUMBER);
+        regExpMap.put("credit", Constants.CREDITCARD_NUMBER);
+        regExpMap.put("telephone", Constants.TELEPHONE_NUMBER);
+
+
+        Iterator<String> it = regExpMap.keySet().iterator();
+
+        while (it.hasNext()) {
+            String key = it.next();
+            Pattern pattern = Pattern.compile(regExpMap.get(key));
+            Matcher m = pattern.matcher(contents);
+
+            ArrayList<String> list = new ArrayList<String>();
+            while (m.find()) {
+                String findStr = m.group();
+                if (StringUtils.isNotBlank(findStr)) {
+                    if (key.equals("url")) {
+                        findStr = findStr.replaceAll("(?i:https?://([^/]+).*)", "$1");
+                    }
+                    //중복 데이터 제거
+                    if (!list.contains(findStr.toLowerCase())) {
+                        list.add(findStr.toLowerCase());
+                    }
+                }
+            }
+
+            if (key.equals("bank")) {
+                category.setBank(list);
+            } else if (key.equals("ip")) {
+                category.setIp(list);
+            } else if (key.equals("telephone")) {
+                category.setTelephone(list);
+            } else if (key.equals("credit")) {
+                //신용카드 데이터 Luhn알고리즘 Validation적용
+                list = validateCardNumber(list);
+                category.setCredit(list);
+            } else if (key.equals("email")) {
+                category.setEmail(list);
+            } else if (key.equals("url")) {
+                category.setUrl(list);
+            }
+        }
+
+        return category;
+    }
+    
+    public static ArrayList<String> validateCardNumber(ArrayList<String> list) {
+        Iterator<String> it = list.iterator();
+        while (it.hasNext()) {
+
+            String cardNumber = it.next();
+            cardNumber = cardNumber.replaceAll("-", "").replaceAll(" ", "").trim();
+
+            int sum = 0;
+            boolean alternate = false;
+
+            for (int i = cardNumber.length() - 1; i >= 0; i--) {
+                int n = Integer.parseInt(cardNumber.substring(i, i + 1));
+                if (alternate) {
+                    n *= 2;
+                    if (n > 9) {
+                        n = (n % 10) + 1;
+                    }
+                }
+                sum += n;
+                alternate = !alternate;
+            }
+
+            if (sum % 10 != 0) {
+                it.remove();
+            }
+        }
+        return list;
+    }
+}
